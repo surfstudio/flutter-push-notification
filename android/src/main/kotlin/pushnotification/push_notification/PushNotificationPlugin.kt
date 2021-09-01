@@ -1,14 +1,14 @@
 package pushnotification.push_notification
 
-import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import io.flutter.plugin.common.MethodChannel.Result
-import io.flutter.plugin.common.MethodCall
-import io.flutter.plugin.common.PluginRegistry.Registrar
 import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
 import androidx.annotation.NonNull
+import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.plugin.common.MethodCall
+import io.flutter.plugin.common.MethodChannel
+import io.flutter.plugin.common.MethodChannel.MethodCallHandler
+import io.flutter.plugin.common.MethodChannel.Result
 import pushnotification.push_notification.handler.PushHandler
 import pushnotification.push_notification.strategy.PushStrategy
 import pushnotification.push_notification.type.PushNotificationTypeData
@@ -51,20 +51,24 @@ private const val DEFAULT_CHANNEL_NAME = "@string/notification_channel_name"
 private const val DEFAULT_COLOR = "@color/design_default_color_primary"
 private const val DEFAULT_AUTOCANCEL = true
 
-/** PushNotificationPlugin */
-public class PushNotificationPlugin(private var context: Context? = null,
-                                    private var channel: MethodChannel? = null) : MethodCallHandler {
+/** SurfNotificationPlugin */
+class PushNotificationPlugin(private var context: Context? = null,
+                             private var channel: MethodChannel? = null
+) : FlutterPlugin, MethodCallHandler {
+
     private val activeActivityHolder = ActiveActivityHolder()
     private val pusInteractor = PushInteractor()
 
     private val pushHandler = PushHandler(activeActivityHolder, pusInteractor)
 
-    companion object {
-        @JvmStatic
-        fun registerWith(registrar: Registrar): Unit {
-            val channel = MethodChannel(registrar.messenger(), CHANNEL)
-            channel.setMethodCallHandler(PushNotificationPlugin(registrar.context(), channel))
-        }
+    override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        val channel = MethodChannel(flutterPluginBinding.flutterEngine.dartExecutor, CHANNEL)
+        channel.setMethodCallHandler(PushNotificationPlugin(flutterPluginBinding.applicationContext, channel))
+    }
+
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        context = null
+        channel = null
     }
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
@@ -81,7 +85,9 @@ public class PushNotificationPlugin(private var context: Context? = null,
 
     private fun initNotificationTapListener() {
         PushClickProvider.pushEventListener = object : PushEventListener {
-            override fun pushDismissListener(context: Context, intent: Intent) {}
+            override fun pushDismissListener(context: Context, intent: Intent) {
+                channel!!.invokeMethod(CALLBACK_DISMISS, null)
+            }
 
             override fun pushOpenListener(context: Context, intent: Intent) {
                 val notificationTypeData = intent.getSerializableExtra(NOTIFICATION_DATA) as PushNotificationTypeData

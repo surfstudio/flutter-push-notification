@@ -8,7 +8,7 @@ environment:
 
 dependencies:
   firebase_core: ^1.0.4
-  firebase_messaging: ^9.1.2
+  firebase_messaging: ^10.0.0
   flutter:
     sdk: flutter
   logger: ^1.0.0
