@@ -9,12 +9,12 @@
 
 This package is part of the [SurfGear](https://github.com/surfstudio/SurfGear) toolkit made by [Surf](https://surf.ru).
 
-## About
+## Description
 
 Library for implementing push notifications.
 The module contains the main work with push notifications.
 
-## Usage
+## Example
 
 An example of using the library can be found in [example](example).
 
@@ -27,7 +27,9 @@ An example of using the library can be found in [example](example).
 * And pass created instances when creating `PushHandler` that will create the strategy using the factory.
 
 * In the notification there should be a field: `click_action: FLUTTER_NOTIFICATION_CLICK`
+  
 * in manifest in \<activity\> you need to add intent filter:
+  
 ```xml
 <intent-filter>
       <action android:name="FLUTTER_NOTIFICATION_CLICK" />
