@@ -68,7 +68,7 @@ class PushNotificationPlugin(private var context: Context? = null,
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         context = null
-        channel!!.setMethodCallHandler(null)
+        channel?.setMethodCallHandler(null)
         channel = null
     }
 
