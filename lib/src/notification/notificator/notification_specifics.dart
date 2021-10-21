@@ -17,10 +17,10 @@ import 'package:push_notification/src/notification/notificator/ios/ios_notificat
 
 /// Specific notification settings for platforms
 class NotificationSpecifics {
-  NotificationSpecifics(this.androidNotificationSpecifics);
-
   /// Settings for android
   AndroidNotificationSpecifics androidNotificationSpecifics;
 
   IosNotificationSpecifics? iosNotificationSpecifics;
+
+  NotificationSpecifics(this.androidNotificationSpecifics);
 }

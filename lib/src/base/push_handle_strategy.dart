@@ -17,7 +17,8 @@ import 'package:push_notification/src/base/notification_payload.dart';
 
 /// abstract notification processing strategy
 abstract class PushHandleStrategy<PT extends NotificationPayload> {
-  PushHandleStrategy(this.payload);
+  /// notification payload
+  final PT payload;
 
   /// Android notification channel id
   ///
@@ -54,14 +55,7 @@ abstract class PushHandleStrategy<PT extends NotificationPayload> {
   /// foreground. iOS 10+ only
   bool presentAlert = true;
 
-  /// notification payload
-  final PT payload;
-
-  /// function that is called to process notification clicks
-  void onTapNotification(NavigatorState? navigator);
-
-  /// function that is called to process notification background
-  void onBackgroundProcess(Map<String, dynamic> message);
+  PushHandleStrategy(this.payload);
 
   @override
   String toString() {
@@ -71,4 +65,10 @@ abstract class PushHandleStrategy<PT extends NotificationPayload> {
         ' $ongoing, playSound: $playSound, presentAlert: $presentAlert,'
         ' payload: $payload}';
   }
+
+  /// function that is called to process notification clicks
+  void onTapNotification(NavigatorState? navigator);
+
+  /// function that is called to process notification background
+  void onBackgroundProcess(Map<String, dynamic> message);
 }

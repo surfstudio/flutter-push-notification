@@ -18,12 +18,6 @@ import 'package:push_notification/src/notification/notificator/notificator.dart'
 
 /// Notifications for the ios platform
 class IOSNotification {
-  IOSNotification({
-    required this.channel,
-    required this.onNotificationTap,
-    this.onPermissionDecline,
-  });
-
   /// MethodChannel for connecting to ios native platform
   final MethodChannel channel;
 
@@ -32,6 +26,12 @@ class IOSNotification {
 
   /// Callback notification decline
   final OnPermissionDeclineCallback? onPermissionDecline;
+
+  IOSNotification({
+    required this.channel,
+    required this.onNotificationTap,
+    this.onPermissionDecline,
+  });
 
   Future init() async {
     channel.setMethodCallHandler(

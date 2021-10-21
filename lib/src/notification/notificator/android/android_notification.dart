@@ -18,16 +18,16 @@ import 'package:push_notification/src/notification/notificator/notificator.dart'
 
 /// Notifications for the android platform
 class AndroidNotification {
-  AndroidNotification({
-    required this.channel,
-    required this.onNotificationTap,
-  });
-
   /// MethodChannel for connecting to android native code
   final MethodChannel channel;
 
   /// Callback notification push
   final OnNotificationTapCallback onNotificationTap;
+
+  AndroidNotification({
+    required this.channel,
+    required this.onNotificationTap,
+  });
 
   /// Initialize notification
   ///

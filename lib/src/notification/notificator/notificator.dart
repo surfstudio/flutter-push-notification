@@ -46,16 +46,7 @@ const String notificationSpecificsArg = 'notificationSpecifics';
 
 /// Util for displaying notifications for android and ios
 class Notificator {
-  Notificator({
-    required this.onNotificationTapCallback,
-    this.onPermissionDecline,
-  }) {
-    _init();
-  }
-
   static const _channel = MethodChannel(channelName);
-  late IOSNotification _iosNotification;
-  late AndroidNotification _androidNotification;
 
   /// Callback notification clicks
   final OnNotificationTapCallback onNotificationTapCallback;
@@ -63,23 +54,14 @@ class Notificator {
   /// Callback notification decline(ios only)
   final OnPermissionDeclineCallback? onPermissionDecline;
 
-  Future _init() async {
-    if (Platform.isAndroid) {
-      _androidNotification = AndroidNotification(
-        channel: _channel,
-        onNotificationTap: onNotificationTapCallback,
-      );
+  late IOSNotification _iosNotification;
+  late AndroidNotification _androidNotification;
 
-      return _androidNotification.init();
-    } else if (Platform.isIOS) {
-      _iosNotification = IOSNotification(
-        channel: _channel,
-        onNotificationTap: onNotificationTapCallback,
-        onPermissionDecline: onPermissionDecline,
-      );
-
-      return _iosNotification.init();
-    }
+  Notificator({
+    required this.onNotificationTapCallback,
+    this.onPermissionDecline,
+  }) {
+    _init();
   }
 
   /// Request notification permissions (iOS only)
@@ -132,5 +114,24 @@ class Notificator {
     }
 
     return Future<void>.value();
+  }
+
+  Future _init() async {
+    if (Platform.isAndroid) {
+      _androidNotification = AndroidNotification(
+        channel: _channel,
+        onNotificationTap: onNotificationTapCallback,
+      );
+
+      return _androidNotification.init();
+    } else if (Platform.isIOS) {
+      _iosNotification = IOSNotification(
+        channel: _channel,
+        onNotificationTap: onNotificationTapCallback,
+        onPermissionDecline: onPermissionDecline,
+      );
+
+      return _iosNotification.init();
+    }
   }
 }

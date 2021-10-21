@@ -19,16 +19,12 @@ import 'package:push_notification/push_notification.dart';
 /// Wrapper over [FirebaseMessaging]
 class MessagingService extends BaseMessagingService {
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
-  late HandleMessageFunction _handleMessage;
-
-  Future<String?> get fcmToken => _messaging.getToken();
 
   final List<String> _topicsSubscription = [];
 
-  /// request notification permissions for ios platform
-  void requestNotificationPermissions() {
-    _messaging.requestPermission();
-  }
+  Future<String?> get fcmToken => _messaging.getToken();
+
+  late HandleMessageFunction _handleMessage;
 
   /// no need to call. initialization is called inside the [PushHandler]
   @override
@@ -54,6 +50,11 @@ class MessagingService extends BaseMessagingService {
         MessageHandlerType.onResume,
       ),
     );
+  }
+
+  /// request notification permissions for ios platform
+  void requestNotificationPermissions() {
+    _messaging.requestPermission();
   }
 
   /// subscribe to [topic] in background.

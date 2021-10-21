@@ -19,9 +19,9 @@ import 'package:push_notification/push_notification.dart';
 const String androidMipMapIcon = '@mipmap/ic_launcher';
 
 class MessageScreen extends StatefulWidget {
-  const MessageScreen(this.pushHandler, {Key? key}) : super(key: key);
-
   final PushHandler pushHandler;
+
+  const MessageScreen(this.pushHandler, {Key? key}) : super(key: key);
 
   @override
   MessageScreenState createState() => MessageScreenState();
