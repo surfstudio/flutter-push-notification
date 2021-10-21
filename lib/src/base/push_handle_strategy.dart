@@ -15,44 +15,45 @@
 import 'package:flutter/cupertino.dart';
 import 'package:push_notification/src/base/notification_payload.dart';
 
-/// abstract notification processing strategy
+/// Abstract notification processing strategy.
 abstract class PushHandleStrategy<PT extends NotificationPayload> {
-  /// notification payload
+  /// Notification payload.
   final PT payload;
 
   /// Android notification channel id
   ///
-  /// "@string/notification_channel_id""
+  /// "@string/notification_channel_id".
   String? notificationChannelId;
 
   /// Android notification channel name
   ///
-  /// "@string/notification_channel_name"
+  /// "@string/notification_channel_name".
   String? notificationChannelName;
 
-  /// push id
+  /// Push id.
   int pushId = 0;
 
-  /// Auto close notification
+  /// Auto close notification.
   bool autoCancelable = false;
 
   /// Path to string resource color notification icons
-  /// "@color/notificaion_icon_color_name"
+  /// "@color/notificaion_icon_color_name".
   String? color;
 
   /// Path to string resource notification icons
-  /// "@mipmap/notificaion_icon_name"
+  /// "@mipmap/notificaion_icon_name".
   String? icon;
 
-  /// non-removable notification
-  /// Android only
+  /// Non-removable notification.
+  /// Android only.
   bool ongoing = false;
 
   /// Indicates if a sound should be played when the notification is displayed.
   bool playSound = true;
 
   /// Display an alert when the notification is triggered while app is in the
-  /// foreground. iOS 10+ only
+  /// foreground.
+  /// iOS 10+ only.
   bool presentAlert = true;
 
   PushHandleStrategy(this.payload);
@@ -66,9 +67,9 @@ abstract class PushHandleStrategy<PT extends NotificationPayload> {
         ' payload: $payload}';
   }
 
-  /// function that is called to process notification clicks
+  /// Function that is called to process notification clicks.
   void onTapNotification(NavigatorState? navigator);
 
-  /// function that is called to process notification background
+  /// Function that is called to process notification background.
   void onBackgroundProcess(Map<String, dynamic> message);
 }

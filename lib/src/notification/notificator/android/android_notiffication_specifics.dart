@@ -12,29 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// Android notification settings
+/// Android notification settings.
 class AndroidNotificationSpecifics {
-  ///Icon drawable
+  /// Icon drawable.
   ///
   /// @mipmap/ic_launcher
   final String? icon;
 
-  /// channelId
+  /// Channel id.
   ///
   /// @string/notification_channel_id
   final String? channelId;
 
-  /// Channel name
+  /// Channel name.
   ///
   /// @string/notification_channel_name
   final String? channelName;
 
-  /// Icon color
+  /// Icon color.
   ///
   /// @color/notification_color
   final String? color;
 
-  /// Notification is auto cancel
+  /// Notification is auto cancel.
   final bool? autoCancelable;
 
   AndroidNotificationSpecifics({

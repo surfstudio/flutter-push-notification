@@ -69,7 +69,7 @@ class PushHandler {
       messageSubject.add(message);
     }
 
-    final strategy = _strategyFactory.createByData(message);
+    final strategy = _strategyFactory.createStrategyByData(message);
 
     if (handlerType == MessageHandlerType.onLaunch ||
         handlerType == MessageHandlerType.onResume) {

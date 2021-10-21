@@ -45,7 +45,7 @@ void main() {
       pushHandleStrategy = PushHandleStrategyMock();
 
       final pushHandleStrategyFactory = PushHandleStrategyFactoryMock();
-      when(() => pushHandleStrategyFactory.createByData(any()))
+      when(() => pushHandleStrategyFactory.createStrategyByData(any()))
           .thenReturn(pushHandleStrategy);
 
       notificationController = NotificationControllerMock();

@@ -16,25 +16,25 @@ import 'dart:io';
 
 import 'package:push_notification/src/base/push_handle_strategy.dart';
 
-/// strategy builder function
+/// Strategy builder function.
 typedef StrategyBuilder = PushHandleStrategy Function(
   Map<String, dynamic> payload,
 );
 
-/// Abstract factory for push notification strategies
+/// Abstract factory for push notification strategies.
 abstract class PushHandleStrategyFactory {
-  /// Action key in data firebase's push
+  /// Action key in data firebase's push.
   /// You can customize your format in the factory implementation.
   static const _key = 'event';
 
-  /// Default strategy, if in the notification is no strategy information
+  /// Default strategy, if in the notification is no strategy information.
   StrategyBuilder get defaultStrategy;
 
-  /// Override with the necessary matching actions and strategy builder
+  /// Override with the necessary matching actions and strategy builder.
   Map<String, StrategyBuilder> get map => {};
 
-  /// Returns a strategy from push data
-  PushHandleStrategy createByData(Map<String, dynamic> messageData) {
+  /// Returns a strategy from push data.
+  PushHandleStrategy createStrategyByData(Map<String, dynamic> messageData) {
     StrategyBuilder? builder;
     try {
       if (Platform.isAndroid) {
