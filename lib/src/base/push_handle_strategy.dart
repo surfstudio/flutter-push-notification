@@ -20,7 +20,7 @@ abstract class PushHandleStrategy<PT extends NotificationPayload> {
   /// Notification payload.
   final PT payload;
 
-  /// Android notification channel id
+  /// Android notification channel id.
   ///
   /// "@string/notification_channel_id".
   String? notificationChannelId;

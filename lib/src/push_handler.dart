@@ -44,9 +44,9 @@ class PushHandler {
     _messagingService.initNotification(handleMessage);
   }
 
-  /// request permission for show notification.
-  /// [soundPemission] - is play sound
-  /// [alertPermission] - is show alert
+  /// Request permission for show notification.
+  /// [soundPemission] - is play sound.
+  /// [alertPermission] - is show alert.
   Future<bool?> requestPermissions({
     bool? soundPemission,
     bool? alertPermission,

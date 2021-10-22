@@ -20,16 +20,6 @@ import 'package:push_notification/src/base/push_handle_strategy_factory.dart';
 import 'package:push_notification/src/notification/notification_controller.dart';
 import 'package:push_notification/src/push_handler.dart';
 
-class BaseMessagingServiceMock extends Mock implements BaseMessagingService {}
-
-class PushHandleStrategyFactoryMock extends Mock
-    implements PushHandleStrategyFactory {}
-
-class PushHandleStrategyMock extends Mock implements PushHandleStrategy {}
-
-class NotificationControllerMock extends Mock
-    implements NotificationController {}
-
 void main() {
   setUpAll(() {
     registerFallbackValue(PushHandleStrategyMock());
@@ -45,14 +35,17 @@ void main() {
       pushHandleStrategy = PushHandleStrategyMock();
 
       final pushHandleStrategyFactory = PushHandleStrategyFactoryMock();
+
       when(() => pushHandleStrategyFactory.createStrategyByData(any()))
           .thenReturn(pushHandleStrategy);
 
       notificationController = NotificationControllerMock();
+
       when(() => notificationController.requestPermissions(
             requestSoundPermission: any(named: 'requestSoundPermission'),
             requestAlertPermission: any(named: 'requestAlertPermission'),
           )).thenAnswer((_) => Future.value(true));
+
       when(() => notificationController.showNotification(any(), any()))
           .thenAnswer((_) => Future<void>.value());
 
@@ -77,30 +70,67 @@ void main() {
             requestAlertPermission: captureAny(named: 'requestAlertPermission'),
           ),
         ).captured;
+
         expect(args, equals([false, true]));
       },
     );
 
     group('handleMessage process passed', () {
-      test('global onLaunch message', () async {
-        const message = {'message': 'simple on launch text'};
+      test(
+        'global onLaunch message',
+        () async {
+          const message = {'message': 'simple on launch text'};
 
-        final messages = <Map<String, dynamic>>[];
-        handler.messageSubject.listen(messages.add);
+          final messages = <Map<String, dynamic>>[];
 
-        handler.handleMessage(message, MessageHandlerType.onLaunch);
+          handler.messageSubject.listen(messages.add);
 
-        await handler.messageSubject.close();
-        expect(messages, equals([message]));
-        verify(() => pushHandleStrategy.onBackgroundProcess(message))
-            .called(equals(1));
-        verifyNever(() => notificationController.showNotification(any(), any()));
-      });
+          expect(messages, isEmpty);
 
-      test('local onResume message', () async {
+          handler.handleMessage(message, MessageHandlerType.onLaunch);
+
+          await handler.messageSubject.close();
+
+          expect(messages, equals([message]));
+
+          verify(() => pushHandleStrategy.onBackgroundProcess(message))
+              .called(equals(1));
+
+          verifyNever(
+            () => notificationController.showNotification(any(), any()),
+          );
+        },
+      );
+
+      test(
+        'local onMessage message',
+        () async {
+          const message = {'message': 'simple on message text'};
+
+          final messages = <Map<String, dynamic>>[];
+          handler.messageSubject.listen(messages.add);
+
+          handler.handleMessage(
+            message,
+            MessageHandlerType.onMessage,
+          );
+
+          await handler.messageSubject.close();
+
+          expect(messages, equals([message]));
+
+          verifyNever(() => pushHandleStrategy.onBackgroundProcess(any()));
+
+          verify(() => notificationController.showNotification(any(), any()))
+              .called(equals(1));
+        },
+      );
+
+      test('local onResume message, localNotification: true', () async {
         const message = {'message': 'simple on resume text'};
 
         final messages = <Map<String, dynamic>>[];
+
         handler.messageSubject.listen(messages.add);
 
         handler.handleMessage(
@@ -110,29 +140,26 @@ void main() {
         );
 
         await handler.messageSubject.close();
+
         expect(messages, isEmpty);
+
         verify(() => pushHandleStrategy.onBackgroundProcess(message))
             .called(equals(1));
-        verifyNever(() => notificationController.showNotification(any(), any()));
-      });
 
-      test('local onMessage message', () async {
-        const message = {'message': 'simple on message text'};
-
-        final messages = <Map<String, dynamic>>[];
-        handler.messageSubject.listen(messages.add);
-
-        handler.handleMessage(
-          message,
-          MessageHandlerType.onMessage,
+        verifyNever(
+          () => notificationController.showNotification(any(), any()),
         );
-
-        await handler.messageSubject.close();
-        expect(messages, equals([message]));
-        verifyNever(() => pushHandleStrategy.onBackgroundProcess(any()));
-        verify(() => notificationController.showNotification(any(), any()))
-            .called(equals(1));
       });
     });
   });
 }
+
+class BaseMessagingServiceMock extends Mock implements BaseMessagingService {}
+
+class PushHandleStrategyFactoryMock extends Mock
+    implements PushHandleStrategyFactory {}
+
+class PushHandleStrategyMock extends Mock implements PushHandleStrategy {}
+
+class NotificationControllerMock extends Mock
+    implements NotificationController {}
