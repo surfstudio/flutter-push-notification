@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:io';
+
 import 'package:push_notification/push_notification.dart';
 import 'package:push_notification/src/base/base_messaging_service.dart';
 import 'package:push_notification/src/base/push_handle_strategy_factory.dart';
@@ -51,10 +53,14 @@ class PushHandler {
     bool? soundPemission,
     bool? alertPermission,
   }) {
-    return _notificationController.requestPermissions(
-      requestSoundPermission: soundPemission,
-      requestAlertPermission: alertPermission,
-    );
+    if(Platform.isIOS) {
+      return _notificationController.requestPermissions(
+        requestSoundPermission: soundPemission,
+        requestAlertPermission: alertPermission,
+      );
+    } else {
+     return Future.value(null);
+    }
   }
 
   /// Display local notification.
