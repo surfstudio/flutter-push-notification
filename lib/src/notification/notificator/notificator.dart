@@ -71,10 +71,6 @@ class Notificator {
     bool? requestSoundPermission,
     bool? requestAlertPermission,
   }) {
-    if (Platform.isAndroid) {
-      return Future.value(true);
-    }
-
     return _iosNotification.requestPermissions(
       requestSoundPermission: requestSoundPermission,
       requestAlertPermission: requestAlertPermission,
