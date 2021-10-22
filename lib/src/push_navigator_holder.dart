@@ -14,7 +14,7 @@
 
 import 'package:flutter/widgets.dart';
 
-/// global navigator context storage
+/// Global navigator context storage.
 class PushNavigatorHolder {
   static final _instance = PushNavigatorHolder._internal();
 

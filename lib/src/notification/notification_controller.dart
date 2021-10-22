@@ -23,7 +23,7 @@ typedef NotificationCallback = void Function(Map<String, dynamic> payload);
 
 const String pushIdParam = 'localPushId';
 
-/// Wrapper over surf notifications
+/// Wrapper over surf notifications.
 class NotificationController {
   Map<int, NotificationCallback> callbackMap =
       HashMap<int, NotificationCallback>();
@@ -37,7 +37,7 @@ class NotificationController {
     );
   }
 
-  /// Request notification permissions (iOS only)
+  /// Request notification permissions (iOS only).
   Future<bool?> requestPermissions({
     bool? requestSoundPermission,
     bool? requestAlertPermission,
@@ -48,8 +48,8 @@ class NotificationController {
     );
   }
 
-  /// displaying notification from the strategy
-  Future<dynamic> show(
+  /// Displaying notification from the strategy.
+  Future<dynamic> showNotification(
     PushHandleStrategy strategy,
     NotificationCallback onSelectNotification,
   ) {
@@ -82,7 +82,7 @@ class NotificationController {
     tmpPayload[pushIdParam] = '$pushId';
     callbackMap[pushId] = onSelectNotification;
 
-    return _notificator.show(
+    return _notificator.showNotification(
       strategy.pushId,
       strategy.payload.title,
       strategy.payload.body,

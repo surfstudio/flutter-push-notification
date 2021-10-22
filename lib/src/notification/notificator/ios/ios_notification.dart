@@ -16,15 +16,15 @@ import 'package:flutter/services.dart';
 import 'package:push_notification/src/notification/notificator/ios/ios_notification_specifics.dart';
 import 'package:push_notification/src/notification/notificator/notificator.dart';
 
-/// Notifications for the ios platform
+/// Notifications for the iOS platform.
 class IOSNotification {
-  /// MethodChannel for connecting to ios native platform
+  /// MethodChannel for connecting to iOS native platform.
   final MethodChannel channel;
 
-  /// Callback notification push
+  /// Callback notification push.
   final OnNotificationTapCallback onNotificationTap;
 
-  /// Callback notification decline
+  /// Callback on notification decline.
   final OnPermissionDeclineCallback? onPermissionDecline;
 
   IOSNotification({
@@ -33,6 +33,9 @@ class IOSNotification {
     this.onPermissionDecline,
   });
 
+  /// Initialize notification.
+  ///
+  /// Initializes notification parameters.
   Future init() async {
     channel.setMethodCallHandler(
       (call) async {
@@ -50,10 +53,10 @@ class IOSNotification {
     );
   }
 
-  /// Request permissions
+  /// Request permissions.
   ///
-  /// requestSoundPermission - is play sound
-  /// requestSoundPermission - is show alert
+  /// [requestSoundPermission] - is play sound.
+  /// [requestAlertPermission] - is show alert.
   Future<bool?> requestPermissions({
     bool? requestSoundPermission,
     bool? requestAlertPermission,
@@ -66,20 +69,23 @@ class IOSNotification {
         },
       );
 
-  /// Show notification
-  /// id - notification identifier
-  /// title - title
-  /// body - the main text of the notification
-  Future show(
+  /// Show notification.
+  ///
+  /// [id] - notification identifier.
+  /// [title] - title.
+  /// [body] - the main text of the notification.
+  /// [data] - data for notification.
+  /// [notificationSpecifics] - notification specifics.
+  Future showNotification(
     int id,
     String title,
     String body,
     String? imageUrl,
     Map<String, String>? data,
-    IosNotificationSpecifics? notificationSpecifics,
+    IOSNotificationSpecifics? notificationSpecifics,
   ) =>
       channel.invokeMethod<dynamic>(
-        callShow,
+        callShowNotification,
         {
           pushIdArg: id,
           titleArg: title,

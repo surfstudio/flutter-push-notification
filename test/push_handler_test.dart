@@ -53,7 +53,7 @@ void main() {
             requestSoundPermission: any(named: 'requestSoundPermission'),
             requestAlertPermission: any(named: 'requestAlertPermission'),
           )).thenAnswer((_) => Future.value(true));
-      when(() => notificationController.show(any(), any()))
+      when(() => notificationController.showNotification(any(), any()))
           .thenAnswer((_) => Future<void>.value());
 
       handler = PushHandler(
@@ -94,7 +94,7 @@ void main() {
         expect(messages, equals([message]));
         verify(() => pushHandleStrategy.onBackgroundProcess(message))
             .called(equals(1));
-        verifyNever(() => notificationController.show(any(), any()));
+        verifyNever(() => notificationController.showNotification(any(), any()));
       });
 
       test('local onResume message', () async {
@@ -113,7 +113,7 @@ void main() {
         expect(messages, isEmpty);
         verify(() => pushHandleStrategy.onBackgroundProcess(message))
             .called(equals(1));
-        verifyNever(() => notificationController.show(any(), any()));
+        verifyNever(() => notificationController.showNotification(any(), any()));
       });
 
       test('local onMessage message', () async {
@@ -130,7 +130,7 @@ void main() {
         await handler.messageSubject.close();
         expect(messages, equals([message]));
         verifyNever(() => pushHandleStrategy.onBackgroundProcess(any()));
-        verify(() => notificationController.show(any(), any()))
+        verify(() => notificationController.showNotification(any(), any()))
             .called(equals(1));
       });
     });

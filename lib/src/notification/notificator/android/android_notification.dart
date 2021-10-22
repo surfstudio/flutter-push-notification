@@ -16,12 +16,12 @@ import 'package:flutter/services.dart';
 import 'package:push_notification/src/notification/notificator/android/android_notiffication_specifics.dart';
 import 'package:push_notification/src/notification/notificator/notificator.dart';
 
-/// Notifications for the android platform
+/// Notifications for the Android platform.
 class AndroidNotification {
-  /// MethodChannel for connecting to android native code
+  /// MethodChannel for connecting to android native code.
   final MethodChannel channel;
 
-  /// Callback notification push
+  /// Callback notification push.
   final OnNotificationTapCallback onNotificationTap;
 
   AndroidNotification({
@@ -29,9 +29,9 @@ class AndroidNotification {
     required this.onNotificationTap,
   });
 
-  /// Initialize notification
+  /// Initialize notification.
   ///
-  /// Initializes notification parameters and click listener
+  /// Initializes notification parameters and listening clicks.
   Future init() async {
     channel.setMethodCallHandler(
       (call) async {
@@ -46,13 +46,14 @@ class AndroidNotification {
     return channel.invokeMethod<dynamic>(callInit);
   }
 
-  /// Show notification
+  /// Show notification.
   ///
-  /// id - notification identifier
-  /// title - title
-  /// body - the main text of the notification
-  /// notificationDetails - notification details
-  Future show(
+  /// [id] - notification identifier.
+  /// [title] - title.
+  /// [body] - the main text of the notification.
+  /// [data] - data for notification.
+  /// [notificationSpecifics] - notification specifics.
+  Future showNotification(
     int id,
     String title,
     String body,
@@ -61,7 +62,7 @@ class AndroidNotification {
     AndroidNotificationSpecifics notificationSpecifics,
   ) async {
     return channel.invokeMethod<dynamic>(
-      callShow,
+      callShowNotification,
       {
         pushIdArg: id,
         titleArg: title,

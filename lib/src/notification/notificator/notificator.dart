@@ -20,23 +20,25 @@ import 'package:push_notification/src/notification/notificator/android/android_n
 import 'package:push_notification/src/notification/notificator/ios/ios_notification.dart';
 import 'package:push_notification/src/notification/notificator/notification_specifics.dart';
 
-/// Callback notification clicks
+/// Callback notification clicks.
 ///
-/// notificationData - notification data
+/// [notificationData] - notification data.
 typedef OnNotificationTapCallback = void Function(Map notificationData);
 
-/// Callback permission decline
+/// Callback on permission decline.
 typedef OnPermissionDeclineCallback = void Function();
 
-/// Channels and methods names
+/// Channel name.
 const String channelName = 'surf_notification';
+
+/// Methods names.
 const String callInit = 'initialize';
-const String callShow = 'show';
+const String callShowNotification = 'show';
 const String callRequest = 'request';
 const String openCallback = 'notificationOpen';
 const String permissionDeclineCallback = 'permissionDecline';
 
-/// Arguments names
+/// Arguments names.
 const String pushIdArg = 'pushId';
 const String titleArg = 'title';
 const String bodyArg = 'body';
@@ -44,14 +46,14 @@ const String imageUrlArg = 'imageUrl';
 const String dataArg = 'data';
 const String notificationSpecificsArg = 'notificationSpecifics';
 
-/// Util for displaying notifications for android and ios
+/// Util for displaying notifications for Android and iOS.
 class Notificator {
   static const _channel = MethodChannel(channelName);
 
-  /// Callback notification clicks
+  /// Callback notification clicks.
   final OnNotificationTapCallback onNotificationTapCallback;
 
-  /// Callback notification decline(ios only)
+  /// Callback notification decline(iOS only).
   final OnPermissionDeclineCallback? onPermissionDecline;
 
   late IOSNotification _iosNotification;
@@ -64,7 +66,7 @@ class Notificator {
     _init();
   }
 
-  /// Request notification permissions (iOS only)
+  /// Request notification permissions (iOS only).
   Future<bool?> requestPermissions({
     bool? requestSoundPermission,
     bool? requestAlertPermission,
@@ -79,13 +81,14 @@ class Notificator {
     );
   }
 
-  /// Request to display notifications
+  /// Show notification.
   ///
-  /// id - notification identifier
-  /// title - title
-  /// body - the main text of the notification
-  /// data - data for notification
-  Future show(
+  /// [id] - notification identifier.
+  /// [title] - title.
+  /// [body] - the main text of the notification.
+  /// [data] - data for notification.
+  /// [notificationSpecifics] - notification specifics.
+  Future showNotification(
     int id,
     String title,
     String body, {
@@ -94,7 +97,7 @@ class Notificator {
     NotificationSpecifics? notificationSpecifics,
   }) {
     if (Platform.isAndroid) {
-      return _androidNotification.show(
+      return _androidNotification.showNotification(
         id,
         title,
         body,
@@ -103,7 +106,7 @@ class Notificator {
         notificationSpecifics!.androidNotificationSpecifics,
       );
     } else if (Platform.isIOS) {
-      return _iosNotification.show(
+      return _iosNotification.showNotification(
         id,
         title,
         body,

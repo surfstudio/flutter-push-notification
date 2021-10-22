@@ -24,9 +24,9 @@ typedef HandleMessageFunction = void Function(
   MessageHandlerType handlerType,
 );
 
-/// Notification handling
+/// Notification handling.
 class PushHandler {
-  /// The ability to directly subscribe to receive messages
+  /// The ability to directly subscribe to receive messages.
   final PublishSubject<Map<String, dynamic>> messageSubject = PublishSubject();
 
   final BehaviorSubject<PushHandleStrategy> selectNotificationSubject =
@@ -44,9 +44,9 @@ class PushHandler {
     _messagingService.initNotification(handleMessage);
   }
 
-  /// request permission for show notification
-  /// soundPemission - is play sound
-  /// alertPermission - is show alert
+  /// request permission for show notification.
+  /// [soundPemission] - is play sound
+  /// [alertPermission] - is show alert
   Future<bool?> requestPermissions({
     bool? soundPemission,
     bool? alertPermission,
@@ -57,9 +57,9 @@ class PushHandler {
     );
   }
 
-  /// display local notification
+  /// Display local notification.
   /// MessagingService calls this method to display the notification that
-  /// came from message service
+  /// came from message service.
   void handleMessage(
     Map<String, dynamic> message,
     MessageHandlerType handlerType, {
@@ -77,7 +77,7 @@ class PushHandler {
     }
 
     if (handlerType == MessageHandlerType.onMessage) {
-      _notificationController.show(
+      _notificationController.showNotification(
         strategy,
         (_) {
           selectNotificationSubject.add(strategy);

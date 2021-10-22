@@ -12,6 +12,5 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// Ios notification settings
-/// todo подумать над доп.опциями ios уведомления
-class IosNotificationSpecifics {}
+/// Ios notification settings.
+class IOSNotificationSpecifics {}
