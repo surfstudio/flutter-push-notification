@@ -75,7 +75,7 @@ class PushHandler {
       messageSubject.add(message);
     }
 
-    final strategy = _strategyFactory.createStrategyByData(message);
+    final strategy = _strategyFactory.createByData(message);
 
     if (handlerType == MessageHandlerType.onLaunch ||
         handlerType == MessageHandlerType.onResume) {
@@ -83,7 +83,7 @@ class PushHandler {
     }
 
     if (handlerType == MessageHandlerType.onMessage) {
-      _notificationController.showNotification(
+      _notificationController.show(
         strategy,
         (_) {
           selectNotificationSubject.add(strategy);

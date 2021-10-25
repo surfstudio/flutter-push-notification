@@ -76,7 +76,7 @@ class IOSNotification {
   /// [body] - the main text of the notification.
   /// [data] - data for notification.
   /// [notificationSpecifics] - notification specifics.
-  Future showNotification(
+  Future show(
     int id,
     String title,
     String body,

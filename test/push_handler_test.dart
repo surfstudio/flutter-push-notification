@@ -45,7 +45,7 @@ void main() {
       pushHandleStrategy = PushHandleStrategyMock();
 
       final pushHandleStrategyFactory = PushHandleStrategyFactoryMock();
-      when(() => pushHandleStrategyFactory.createStrategyByData(any()))
+      when(() => pushHandleStrategyFactory.createByData(any()))
           .thenReturn(pushHandleStrategy);
 
       notificationController = NotificationControllerMock();
@@ -53,7 +53,7 @@ void main() {
             requestSoundPermission: any(named: 'requestSoundPermission'),
             requestAlertPermission: any(named: 'requestAlertPermission'),
           )).thenAnswer((_) => Future.value(true));
-      when(() => notificationController.showNotification(any(), any()))
+      when(() => notificationController.show(any(), any()))
           .thenAnswer((_) => Future<void>.value());
 
       handler = PushHandler(
@@ -94,7 +94,7 @@ void main() {
         expect(messages, equals([message]));
         verify(() => pushHandleStrategy.onBackgroundProcess(message))
             .called(equals(1));
-        verifyNever(() => notificationController.showNotification(any(), any()));
+        verifyNever(() => notificationController.show(any(), any()));
       });
 
       test('local onResume message', () async {
@@ -113,7 +113,7 @@ void main() {
         expect(messages, isEmpty);
         verify(() => pushHandleStrategy.onBackgroundProcess(message))
             .called(equals(1));
-        verifyNever(() => notificationController.showNotification(any(), any()));
+        verifyNever(() => notificationController.show(any(), any()));
       });
 
       test('local onMessage message', () async {
@@ -130,7 +130,7 @@ void main() {
         await handler.messageSubject.close();
         expect(messages, equals([message]));
         verifyNever(() => pushHandleStrategy.onBackgroundProcess(any()));
-        verify(() => notificationController.showNotification(any(), any()))
+        verify(() => notificationController.show(any(), any()))
             .called(equals(1));
       });
     });
