@@ -85,7 +85,7 @@ class IOSNotification {
     IOSNotificationSpecifics? notificationSpecifics,
   ) =>
       channel.invokeMethod<dynamic>(
-        callShowNotification,
+        callShow,
         {
           pushIdArg: id,
           titleArg: title,

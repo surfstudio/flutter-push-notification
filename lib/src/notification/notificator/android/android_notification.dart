@@ -62,7 +62,7 @@ class AndroidNotification {
     AndroidNotificationSpecifics notificationSpecifics,
   ) async {
     return channel.invokeMethod<dynamic>(
-      callShowNotification,
+      callShow,
       {
         pushIdArg: id,
         titleArg: title,

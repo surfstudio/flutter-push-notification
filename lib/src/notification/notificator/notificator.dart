@@ -33,7 +33,7 @@ const String channelName = 'surf_notification';
 
 /// Methods names.
 const String callInit = 'initialize';
-const String callShowNotification = 'show';
+const String callShow = 'show';
 const String callRequest = 'request';
 const String openCallback = 'notificationOpen';
 const String permissionDeclineCallback = 'permissionDecline';
