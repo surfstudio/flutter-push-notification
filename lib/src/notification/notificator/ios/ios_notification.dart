@@ -82,7 +82,7 @@ class IOSNotification {
     String body,
     String? imageUrl,
     Map<String, String>? data,
-    IOSNotificationSpecifics? notificationSpecifics,
+    IosNotificationSpecifics? notificationSpecifics,
   ) =>
       channel.invokeMethod<dynamic>(
         callShow,

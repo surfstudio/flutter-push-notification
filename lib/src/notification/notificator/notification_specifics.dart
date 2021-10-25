@@ -21,7 +21,7 @@ class NotificationSpecifics {
   AndroidNotificationSpecifics androidNotificationSpecifics;
 
   /// Settings for iOS.
-  IOSNotificationSpecifics? iosNotificationSpecifics;
+  IosNotificationSpecifics? iosNotificationSpecifics;
 
   NotificationSpecifics(this.androidNotificationSpecifics);
 }
