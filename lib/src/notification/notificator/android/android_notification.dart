@@ -59,7 +59,7 @@ class AndroidNotification {
     String body,
     String? imageUrl,
     Map<String, String>? data,
-    AndroidNotificationSpecifics notificationSpecifics,
+    AndroidNotificationSpecifics? notificationSpecifics,
   ) async {
     return channel.invokeMethod<dynamic>(
       callShowNotification,
@@ -69,7 +69,7 @@ class AndroidNotification {
         bodyArg: body,
         imageUrlArg: imageUrl,
         dataArg: data,
-        notificationSpecificsArg: notificationSpecifics.toMap(),
+        notificationSpecificsArg: notificationSpecifics?.toMap(),
       },
     );
   }

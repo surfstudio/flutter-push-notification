@@ -13,12 +13,13 @@
 // limitations under the License.
 
 import 'dart:async';
-import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:push_notification/src/notification/notificator/android/android_notification.dart';
 import 'package:push_notification/src/notification/notificator/ios/ios_notification.dart';
 import 'package:push_notification/src/notification/notificator/notification_specifics.dart';
+import 'package:push_notification/src/util/platform_wrapper.dart';
 
 /// Callback notification clicks.
 ///
@@ -56,14 +57,19 @@ class Notificator {
   /// Callback notification decline(iOS only).
   final OnPermissionDeclineCallback? onPermissionDecline;
 
-  late IOSNotification _iosNotification;
-  late AndroidNotification _androidNotification;
+  IOSNotification? iosNotification;
+  AndroidNotification? androidNotification;
+  late PlatformWrapper _platform;
 
   Notificator({
     required this.onNotificationTapCallback,
     this.onPermissionDecline,
+    PlatformWrapper? platform,
+    this.iosNotification,
+    this.androidNotification,
   }) {
-    _init();
+    _platform = platform ?? PlatformWrapper();
+    init();
   }
 
   /// Request notification permissions (iOS only).
@@ -71,7 +77,7 @@ class Notificator {
     bool? requestSoundPermission,
     bool? requestAlertPermission,
   }) {
-    return _iosNotification.requestPermissions(
+    return iosNotification!.requestPermissions(
       requestSoundPermission: requestSoundPermission,
       requestAlertPermission: requestAlertPermission,
     );
@@ -92,45 +98,46 @@ class Notificator {
     Map<String, String>? data,
     NotificationSpecifics? notificationSpecifics,
   }) {
-    if (Platform.isAndroid) {
-      return _androidNotification.showNotification(
+    if (_platform.getPlatform() == TargetPlatform.android) {
+      return androidNotification!.showNotification(
         id,
         title,
         body,
         imageUrl,
         data,
-        notificationSpecifics!.androidNotificationSpecifics,
+        notificationSpecifics?.androidNotificationSpecifics,
       );
-    } else if (Platform.isIOS) {
-      return _iosNotification.showNotification(
+    } else if (_platform.getPlatform() == TargetPlatform.iOS) {
+      return iosNotification!.showNotification(
         id,
         title,
         body,
         imageUrl,
         data,
-        notificationSpecifics!.iosNotificationSpecifics,
+        notificationSpecifics?.iosNotificationSpecifics,
       );
     }
 
     return Future<void>.value();
   }
 
-  Future _init() async {
-    if (Platform.isAndroid) {
-      _androidNotification = AndroidNotification(
+  @visibleForTesting
+  Future init() async {
+    if (_platform.getPlatform() == TargetPlatform.android) {
+      androidNotification ??= AndroidNotification(
         channel: _channel,
         onNotificationTap: onNotificationTapCallback,
       );
 
-      return _androidNotification.init();
-    } else if (Platform.isIOS) {
-      _iosNotification = IOSNotification(
+      return androidNotification!.init();
+    } else if (_platform.getPlatform() == TargetPlatform.iOS) {
+      iosNotification ??= IOSNotification(
         channel: _channel,
         onNotificationTap: onNotificationTapCallback,
         onPermissionDecline: onPermissionDecline,
       );
 
-      return _iosNotification.init();
+      return iosNotification!.init();
     }
   }
 }

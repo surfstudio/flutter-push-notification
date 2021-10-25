@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:push_notification/push_notification.dart';
 import 'package:push_notification/src/base/base_messaging_service.dart';
 import 'package:push_notification/src/base/push_handle_strategy_factory.dart';
 import 'package:push_notification/src/notification/notification_controller.dart';
 import 'package:push_notification/src/push_navigator_holder.dart';
+import 'package:push_notification/src/util/platform_wrapper.dart';
 import 'package:rxdart/subjects.dart';
 
 typedef HandleMessageFunction = void Function(
@@ -38,12 +39,16 @@ class PushHandler {
   final NotificationController _notificationController;
   final BaseMessagingService _messagingService;
 
+  late PlatformWrapper _platform;
+
   PushHandler(
     this._strategyFactory,
     this._notificationController,
-    this._messagingService,
-  ) {
+    this._messagingService, {
+    PlatformWrapper? platform,
+  }) {
     _messagingService.initNotification(handleMessage);
+    _platform = platform ?? PlatformWrapper();
   }
 
   /// Request permission for show notification.
@@ -53,13 +58,13 @@ class PushHandler {
     bool? soundPemission,
     bool? alertPermission,
   }) {
-    if(Platform.isIOS) {
+    if (_platform.getPlatform() == TargetPlatform.iOS) {
       return _notificationController.requestPermissions(
         requestSoundPermission: soundPemission,
         requestAlertPermission: alertPermission,
       );
     } else {
-     return Future.value(null);
+      return Future.value(null);
     }
   }
 

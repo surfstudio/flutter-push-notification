@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:push_notification/src/base/base_messaging_service.dart';
@@ -19,114 +20,144 @@ import 'package:push_notification/src/base/push_handle_strategy.dart';
 import 'package:push_notification/src/base/push_handle_strategy_factory.dart';
 import 'package:push_notification/src/notification/notification_controller.dart';
 import 'package:push_notification/src/push_handler.dart';
+import 'package:push_notification/src/util/platform_wrapper.dart';
 
 void main() {
+
   setUpAll(() {
     registerFallbackValue(PushHandleStrategyMock());
   });
 
-  group('PushHandler', () {
-    late PushHandler handler;
+  late PushHandler handler;
 
-    late NotificationControllerMock notificationController;
-    late PushHandleStrategyMock pushHandleStrategy;
+  late NotificationControllerMock notificationController;
+  late PushHandleStrategyMock pushHandleStrategy;
+  late PlatformWrapperMock platform;
 
-    setUp(() {
-      pushHandleStrategy = PushHandleStrategyMock();
+  setUp(() {
+    pushHandleStrategy = PushHandleStrategyMock();
+    notificationController = NotificationControllerMock();
+    platform = PlatformWrapperMock();
 
-      final pushHandleStrategyFactory = PushHandleStrategyFactoryMock();
+    final pushHandleStrategyFactory = PushHandleStrategyFactoryMock();
 
-      when(() => pushHandleStrategyFactory.createStrategyByData(any()))
-          .thenReturn(pushHandleStrategy);
+    when(() => pushHandleStrategyFactory.createStrategyByData(any()))
+        .thenReturn(pushHandleStrategy);
 
-      notificationController = NotificationControllerMock();
+    when(() => notificationController.requestPermissions(
+          requestSoundPermission: any(named: 'requestSoundPermission'),
+          requestAlertPermission: any(named: 'requestAlertPermission'),
+        )).thenAnswer((_) => Future.value(true));
 
-      when(() => notificationController.requestPermissions(
-            requestSoundPermission: any(named: 'requestSoundPermission'),
-            requestAlertPermission: any(named: 'requestAlertPermission'),
-          )).thenAnswer((_) => Future.value(true));
+    when(() => notificationController.showNotification(any(), any()))
+        .thenAnswer((_) => Future<void>.value());
 
-      when(() => notificationController.showNotification(any(), any()))
-          .thenAnswer((_) => Future<void>.value());
+    handler = PushHandler(
+      pushHandleStrategyFactory,
+      notificationController,
+      BaseMessagingServiceMock(),
+      platform: platform,
+    );
+  });
 
-      handler = PushHandler(
-        pushHandleStrategyFactory,
-        notificationController,
-        BaseMessagingServiceMock(),
+  group(
+    'Call requestPermissions method:',
+    () {
+      test(
+        'if the platform is iOS requestPermissions methods should call correctly'
+        ' method at notificashionController',
+        () {
+          when(() => platform.getPlatform()).thenReturn(TargetPlatform.iOS);
+
+          handler.requestPermissions(
+            soundPemission: false,
+            alertPermission: true,
+          );
+
+          final args = verify(
+            () => notificationController.requestPermissions(
+              requestSoundPermission:
+                  captureAny(named: 'requestSoundPermission'),
+              requestAlertPermission:
+                  captureAny(named: 'requestAlertPermission'),
+            ),
+          ).captured;
+
+          expect(args, equals([false, true]));
+        },
       );
-    });
 
+      test(
+        'if platfotm is not iOS requestPermissions method should return null',
+        () async {
+          when(() => platform.getPlatform()).thenReturn(TargetPlatform.android);
+
+          final response = await handler.requestPermissions(
+            soundPemission: false,
+            alertPermission: true,
+          );
+
+          expect(response, null);
+        },
+      );
+    },
+  );
+
+  group('Call handleMessage method:', () {
     test(
-      'requestPermissions request required permission from passed notification controller',
-      () {
-        handler.requestPermissions(
-          soundPemission: false,
-          alertPermission: true,
+      'if MessageHandlerType is onLaunch messageSubject should receive correctly message',
+      () async {
+        const message = {'message': 'simple on launch text'};
+
+        final messages = <Map<String, dynamic>>[];
+
+        handler.messageSubject.listen(messages.add);
+
+        expect(messages, isEmpty);
+
+        handler.handleMessage(message, MessageHandlerType.onLaunch);
+
+        await handler.messageSubject.close();
+
+        expect(messages, equals([message]));
+
+        verify(() => pushHandleStrategy.onBackgroundProcess(message))
+            .called(equals(1));
+
+        verifyNever(
+          () => notificationController.showNotification(any(), any()),
         );
-
-        final args = verify(
-          () => notificationController.requestPermissions(
-            requestSoundPermission: captureAny(named: 'requestSoundPermission'),
-            requestAlertPermission: captureAny(named: 'requestAlertPermission'),
-          ),
-        ).captured;
-
-        expect(args, equals([false, true]));
       },
     );
 
-    group('handleMessage process passed', () {
-      test(
-        'global onLaunch message',
-        () async {
-          const message = {'message': 'simple on launch text'};
+    test(
+      'if MessageHandlerType is onMessage messageSubject should receive correctly message',
+      () async {
+        const message = {'message': 'simple on message text'};
 
-          final messages = <Map<String, dynamic>>[];
+        final messages = <Map<String, dynamic>>[];
+        handler.messageSubject.listen(messages.add);
 
-          handler.messageSubject.listen(messages.add);
+        handler.handleMessage(
+          message,
+          MessageHandlerType.onMessage,
+        );
 
-          expect(messages, isEmpty);
+        await handler.messageSubject.close();
 
-          handler.handleMessage(message, MessageHandlerType.onLaunch);
+        expect(messages, equals([message]));
 
-          await handler.messageSubject.close();
+        verifyNever(() => pushHandleStrategy.onBackgroundProcess(any()));
 
-          expect(messages, equals([message]));
+        verify(() => notificationController.showNotification(any(), any()))
+            .called(equals(1));
+      },
+    );
 
-          verify(() => pushHandleStrategy.onBackgroundProcess(message))
-              .called(equals(1));
-
-          verifyNever(
-            () => notificationController.showNotification(any(), any()),
-          );
-        },
-      );
-
-      test(
-        'local onMessage message',
-        () async {
-          const message = {'message': 'simple on message text'};
-
-          final messages = <Map<String, dynamic>>[];
-          handler.messageSubject.listen(messages.add);
-
-          handler.handleMessage(
-            message,
-            MessageHandlerType.onMessage,
-          );
-
-          await handler.messageSubject.close();
-
-          expect(messages, equals([message]));
-
-          verifyNever(() => pushHandleStrategy.onBackgroundProcess(any()));
-
-          verify(() => notificationController.showNotification(any(), any()))
-              .called(equals(1));
-        },
-      );
-
-      test('local onResume message, localNotification: true', () async {
+    test(
+      'if MessageHandlerType is onResume and localNotification is true'
+      ' messageSubject shouldn not receive a message',
+      () async {
         const message = {'message': 'simple on resume text'};
 
         final messages = <Map<String, dynamic>>[];
@@ -149,8 +180,8 @@ void main() {
         verifyNever(
           () => notificationController.showNotification(any(), any()),
         );
-      });
-    });
+      },
+    );
   });
 }
 
@@ -163,3 +194,5 @@ class PushHandleStrategyMock extends Mock implements PushHandleStrategy {}
 
 class NotificationControllerMock extends Mock
     implements NotificationController {}
+
+class PlatformWrapperMock extends Mock implements PlatformWrapper {}
