@@ -49,7 +49,7 @@ class NotificationController {
   }
 
   /// Displaying notification from the strategy.
-  Future<dynamic> showNotification(
+  Future<dynamic> show(
     PushHandleStrategy strategy,
     NotificationCallback onSelectNotification,
   ) {
@@ -82,7 +82,7 @@ class NotificationController {
     tmpPayload[pushIdParam] = '$pushId';
     callbackMap[pushId] = onSelectNotification;
 
-    return _notificator.showNotification(
+    return _notificator.show(
       strategy.pushId,
       strategy.payload.title,
       strategy.payload.body,

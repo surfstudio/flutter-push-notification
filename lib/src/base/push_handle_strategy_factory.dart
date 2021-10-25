@@ -34,7 +34,7 @@ abstract class PushHandleStrategyFactory {
   Map<String, StrategyBuilder> get map => {};
 
   /// Returns a strategy from push data.
-  PushHandleStrategy createStrategyByData(Map<String, dynamic> messageData) {
+  PushHandleStrategy createByData(Map<String, dynamic> messageData) {
     StrategyBuilder? builder;
     try {
       if (Platform.isAndroid) {

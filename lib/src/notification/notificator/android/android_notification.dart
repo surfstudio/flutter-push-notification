@@ -53,7 +53,7 @@ class AndroidNotification {
   /// [body] - the main text of the notification.
   /// [data] - data for notification.
   /// [notificationSpecifics] - notification specifics.
-  Future showNotification(
+  Future show(
     int id,
     String title,
     String body,
@@ -62,7 +62,7 @@ class AndroidNotification {
     AndroidNotificationSpecifics? notificationSpecifics,
   ) async {
     return channel.invokeMethod<dynamic>(
-      callShowNotification,
+      callShow,
       {
         pushIdArg: id,
         titleArg: title,

@@ -41,7 +41,7 @@ void main() {
 
     final pushHandleStrategyFactory = PushHandleStrategyFactoryMock();
 
-    when(() => pushHandleStrategyFactory.createStrategyByData(any()))
+    when(() => pushHandleStrategyFactory.createByData(any()))
         .thenReturn(pushHandleStrategy);
 
     when(() => notificationController.requestPermissions(
@@ -49,7 +49,7 @@ void main() {
           requestAlertPermission: any(named: 'requestAlertPermission'),
         )).thenAnswer((_) => Future.value(true));
 
-    when(() => notificationController.showNotification(any(), any()))
+    when(() => notificationController.show(any(), any()))
         .thenAnswer((_) => Future<void>.value());
 
     handler = PushHandler(

@@ -64,8 +64,8 @@ class _MyAppState extends State<MyApp> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            notification.showNotification(
-               1,
+            notification.show(
+              1,
               'hello',
               'this is test',
               imageUrl: 'https://www.lumico.io/wp-019/09/flutter.jpg',

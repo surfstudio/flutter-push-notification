@@ -13,4 +13,4 @@
 // limitations under the License.
 
 /// Ios notification settings.
-class IOSNotificationSpecifics {}
+class IosNotificationSpecifics {}
