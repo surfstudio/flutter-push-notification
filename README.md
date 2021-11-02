@@ -41,10 +41,10 @@ Add `push_notification` to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  push_notification: ^1.1.0
+  push_notification: $currentVersion$
 ```
 
-You can use both `stable` and `dev` versions of the package listed above in the badges bar.
+<p>At this moment, the current version of <code>push-notification</code> is <a href="https://pub.dev/packages/push-notification"><img style="vertical-align:middle;" src="https://img.shields.io/pub/v/push-notification.svg" alt="push-notification version"></a>.</p>
 
 ## Changelog
 
