@@ -44,7 +44,7 @@ dependencies:
   push_notification: $currentVersion$
 ```
 
-<p>At this moment, the current version of <code>push-notification</code> is <a href="https://pub.dev/packages/push-notification"><img style="vertical-align:middle;" src="https://img.shields.io/pub/v/push-notification.svg" alt="push-notification version"></a>.</p>
+<p>At this moment, the current version of <code>push-notification</code> is <a href="https://pub.dev/packages/push_notification"><img style="vertical-align:middle;" src="https://img.shields.io/pub/v/push_notification?logo=dart&logoColor=white" alt="push-notification version"></a>.</p>
 
 ## Changelog
 
