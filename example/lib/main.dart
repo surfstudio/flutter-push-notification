@@ -63,7 +63,7 @@ class _MyAppState extends State<MyApp> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            notification.showNotification(
+            notification.show(
               1,
               'hello',
               'this is test',

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:io';
+
 import 'package:push_notification/push_notification.dart';
 import 'package:push_notification/src/base/base_messaging_service.dart';
 import 'package:push_notification/src/base/push_handle_strategy_factory.dart';
@@ -44,17 +46,21 @@ class PushHandler {
     _messagingService.initNotification(handleMessage);
   }
 
-  /// request permission for show notification.
-  /// [soundPemission] - is play sound
-  /// [alertPermission] - is show alert
+  /// Request permission for show notification.
+  /// [soundPemission] - is play sound.
+  /// [alertPermission] - is show alert.
   Future<bool?> requestPermissions({
     bool? soundPemission,
     bool? alertPermission,
   }) {
-    return _notificationController.requestPermissions(
-      requestSoundPermission: soundPemission,
-      requestAlertPermission: alertPermission,
-    );
+    if(Platform.isIOS) {
+      return _notificationController.requestPermissions(
+        requestSoundPermission: soundPemission,
+        requestAlertPermission: alertPermission,
+      );
+    } else {
+     return Future.value(null);
+    }
   }
 
   /// Display local notification.
@@ -69,7 +75,7 @@ class PushHandler {
       messageSubject.add(message);
     }
 
-    final strategy = _strategyFactory.createStrategyByData(message);
+    final strategy = _strategyFactory.createByData(message);
 
     if (handlerType == MessageHandlerType.onLaunch ||
         handlerType == MessageHandlerType.onResume) {
@@ -77,7 +83,7 @@ class PushHandler {
     }
 
     if (handlerType == MessageHandlerType.onMessage) {
-      _notificationController.showNotification(
+      _notificationController.show(
         strategy,
         (_) {
           selectNotificationSubject.add(strategy);

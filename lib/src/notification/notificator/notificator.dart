@@ -33,7 +33,7 @@ const String channelName = 'surf_notification';
 
 /// Methods names.
 const String callInit = 'initialize';
-const String callShowNotification = 'show';
+const String callShow = 'show';
 const String callRequest = 'request';
 const String openCallback = 'notificationOpen';
 const String permissionDeclineCallback = 'permissionDecline';
@@ -71,10 +71,6 @@ class Notificator {
     bool? requestSoundPermission,
     bool? requestAlertPermission,
   }) {
-    if (Platform.isAndroid) {
-      return Future.value(true);
-    }
-
     return _iosNotification.requestPermissions(
       requestSoundPermission: requestSoundPermission,
       requestAlertPermission: requestAlertPermission,
@@ -88,7 +84,7 @@ class Notificator {
   /// [body] - the main text of the notification.
   /// [data] - data for notification.
   /// [notificationSpecifics] - notification specifics.
-  Future showNotification(
+  Future show(
     int id,
     String title,
     String body, {
@@ -97,7 +93,7 @@ class Notificator {
     NotificationSpecifics? notificationSpecifics,
   }) {
     if (Platform.isAndroid) {
-      return _androidNotification.showNotification(
+      return _androidNotification.show(
         id,
         title,
         body,
@@ -106,7 +102,7 @@ class Notificator {
         notificationSpecifics!.androidNotificationSpecifics,
       );
     } else if (Platform.isIOS) {
-      return _iosNotification.showNotification(
+      return _iosNotification.show(
         id,
         title,
         body,
