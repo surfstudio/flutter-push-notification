@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:push_notification/push_notification.dart';
@@ -20,36 +20,36 @@ import 'package:push_notification/src/notification/notificator/android/android_n
 import 'package:push_notification/src/notification/notificator/ios/ios_notification.dart';
 import 'package:push_notification/src/util/platform_wrapper.dart';
 
-import 'push_handler_test.dart';
-
 void main() {
-  setUpAll(() {
-    registerFallbackValue(PushHandleStrategyMock());
-  });
+  const id = 1;
+  const title = 'Test title';
+  const body = 'Test body';
+  const imageUrl = 'Test url';
+  const data = {'Test key': 'Test value'};
 
   late Notificator notificator;
   late MockPlatformWrapper platform;
   late MockiOSNotification iosNotification;
   late MockAndroidNotification androidNotification;
+  late MockAndroidNotificationSpecifics androidNotificationSpecifics;
+  late NotificationSpecifics notificationSpecifics;
+  late MockMethodChannel methodChannel;
 
   setUp(
     () {
       platform = MockPlatformWrapper();
-      iosNotification = MockiOSNotification();
-      androidNotification = MockAndroidNotification();
 
+      iosNotification = MockiOSNotification();
       when(() => iosNotification.init()).thenAnswer(
         (_) => Future<void>.value(),
       );
-
       when(
         () => iosNotification.requestPermissions(
           requestSoundPermission: any(named: 'requestSoundPermission'),
           requestAlertPermission: any(named: 'requestAlertPermission'),
         ),
       ).thenAnswer((_) => Future.value(true));
-
-      when(() => iosNotification.showNotification(
+      when(() => iosNotification.show(
             any(),
             any(),
             any(),
@@ -58,18 +58,72 @@ void main() {
             any(),
           )).thenAnswer((invocation) => Future<void>.value());
 
+      androidNotification = MockAndroidNotification();
       when(() => androidNotification.init()).thenAnswer(
-            (_) => Future<void>.value(),
+        (_) => Future<void>.value(),
+      );
+      when(() => androidNotification.show(
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+          )).thenAnswer((invocation) => Future<void>.value());
+
+      androidNotificationSpecifics = MockAndroidNotificationSpecifics();
+
+      notificationSpecifics =
+          NotificationSpecifics(androidNotificationSpecifics);
+
+      methodChannel = MockMethodChannel();
+      when(() => methodChannel.invokeMethod<dynamic>(any()))
+          .thenAnswer((invocation) => Future<void>.value());
+    },
+  );
+
+  test(
+    'If platform is not passed to the Notificator, platform should be '
+    'initialized with a default value',
+    () {
+      when(() => platform.isAndroid).thenReturn(false);
+      when(() => platform.isIOS).thenReturn(false);
+
+      notificator = Notificator(
+        onNotificationTapCallback: (notificationData) {},
+        onPermissionDecline: () {},
+        iosNotification: iosNotification,
       );
 
-      when(() => androidNotification.showNotification(
-            any(),
-            any(),
-            any(),
-            any(),
-            any(),
-            any(),
-          )).thenAnswer((invocation) => Future<void>.value());
+      expect(notificator.platform, isNotNull);
+    },
+  );
+
+  test(
+    'Method show should return  Future<void>.value() if platform not Android '
+    'and not iOS',
+    () {
+      when(() => platform.isAndroid).thenReturn(false);
+      when(() => platform.isIOS).thenReturn(false);
+
+      notificator = Notificator(
+        onNotificationTapCallback: (notificationData) {},
+        onPermissionDecline: () {},
+        iosNotification: iosNotification,
+        platform: platform,
+      );
+      final expectedResponse = Future<void>.value();
+
+      final response = notificator.show(
+        id,
+        title,
+        body,
+        imageUrl: imageUrl,
+        data: data,
+        notificationSpecifics: notificationSpecifics,
+      );
+
+      expect(response.runtimeType, expectedResponse.runtimeType);
     },
   );
 
@@ -77,10 +131,28 @@ void main() {
     'Сreating notificator and calling its methods on the platform iOS:',
     () {
       test(
+        'If you do not pass the iosNotification when creating a notificator, '
+        'it will have a default value',
+        () {
+          when(() => platform.isAndroid).thenReturn(false);
+          when(() => platform.isIOS).thenReturn(true);
+
+          notificator = Notificator(
+            onNotificationTapCallback: (notificationData) {},
+            onPermissionDecline: () {},
+            platform: platform,
+            channel: methodChannel,
+          );
+
+          expect(notificator.iosNotification, isNotNull);
+        },
+      );
+
+      test(
         'When creating notificator the init method must be called once',
         () {
-          when(() => platform.getPlatform())
-              .thenAnswer((_) => TargetPlatform.iOS);
+          when(() => platform.isAndroid).thenReturn(false);
+          when(() => platform.isIOS).thenReturn(true);
 
           notificator = Notificator(
             onNotificationTapCallback: (notificationData) {},
@@ -98,8 +170,8 @@ void main() {
       test(
         'Method requestPermissions should work correctly',
         () {
-          when(() => platform.getPlatform())
-              .thenAnswer((_) => TargetPlatform.iOS);
+          when(() => platform.isAndroid).thenReturn(false);
+          when(() => platform.isIOS).thenReturn(true);
 
           notificator = Notificator(
             onNotificationTapCallback: (notificationData) {},
@@ -125,28 +197,31 @@ void main() {
       );
 
       test(
-        'Method showNotification should work correctly',
+        'Method show should work correctly',
         () {
-          when(() => platform.getPlatform())
-              .thenAnswer((_) => TargetPlatform.iOS);
+          when(() => platform.isAndroid).thenReturn(false);
+          when(() => platform.isIOS).thenReturn(true);
 
           notificator = Notificator(
             onNotificationTapCallback: (notificationData) {},
             onPermissionDecline: () {},
             iosNotification: iosNotification,
             platform: platform,
-          )..showNotification(
-              1,
-              'Test title',
-              'Test body',
+          )..show(
+              id,
+              title,
+              body,
+              imageUrl: imageUrl,
+              data: data,
+              notificationSpecifics: notificationSpecifics,
             );
 
-          verify(() => iosNotification.showNotification(
-                1,
-                'Test title',
-                'Test body',
-                any(),
-                any(),
+          verify(() => iosNotification.show(
+                id,
+                title,
+                body,
+                imageUrl,
+                data,
                 any(),
               )).called(1);
         },
@@ -158,10 +233,31 @@ void main() {
     'Сreating notificator and calling its methods on the platform Android:',
     () {
       test(
+        'If you do not pass the AndroidNotification when creating a notificator, '
+        'it will have a default value',
+        () {
+          when(() => platform.isAndroid).thenReturn(true);
+          when(() => platform.isIOS).thenReturn(false);
+
+          notificator = Notificator(
+            onNotificationTapCallback: (notificationData) {},
+            onPermissionDecline: () {},
+            platform: platform,
+            channel: methodChannel,
+          );
+
+          expect(
+            notificator.androidNotification,
+            isNotNull,
+          );
+        },
+      );
+
+      test(
         'When creating notificator the init method must be called once',
         () {
-          when(() => platform.getPlatform())
-              .thenAnswer((_) => TargetPlatform.android);
+          when(() => platform.isAndroid).thenReturn(true);
+          when(() => platform.isIOS).thenReturn(false);
 
           notificator = Notificator(
             onNotificationTapCallback: (notificationData) {},
@@ -177,30 +273,33 @@ void main() {
       );
 
       test(
-        'Method showNotification should work correctly',
-            () {
-          when(() => platform.getPlatform())
-              .thenAnswer((_) => TargetPlatform.android);
+        'Method show should work correctly',
+        () {
+          when(() => platform.isAndroid).thenReturn(true);
+          when(() => platform.isIOS).thenReturn(false);
 
           notificator = Notificator(
             onNotificationTapCallback: (notificationData) {},
             onPermissionDecline: () {},
             androidNotification: androidNotification,
             platform: platform,
-          )..showNotification(
-            1,
-            'Test title',
-            'Test body',
-          );
+          )..show(
+              id,
+              title,
+              body,
+              imageUrl: imageUrl,
+              data: data,
+              notificationSpecifics: notificationSpecifics,
+            );
 
-          verify(() => androidNotification.showNotification(
-            1,
-            'Test title',
-            'Test body',
-            any(),
-            any(),
-            any(),
-          )).called(1);
+          verify(() => androidNotification.show(
+                id,
+                title,
+                body,
+                imageUrl,
+                data,
+                notificationSpecifics.androidNotificationSpecifics,
+              )).called(1);
         },
       );
     },
@@ -212,3 +311,8 @@ class MockPlatformWrapper extends Mock implements PlatformWrapper {}
 class MockiOSNotification extends Mock implements IOSNotification {}
 
 class MockAndroidNotification extends Mock implements AndroidNotification {}
+
+class MockMethodChannel extends Mock implements MethodChannel {}
+
+class MockAndroidNotificationSpecifics extends Mock
+    implements AndroidNotificationSpecifics {}

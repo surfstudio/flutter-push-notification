@@ -57,19 +57,21 @@ class Notificator {
   /// Callback notification decline(iOS only).
   final OnPermissionDeclineCallback? onPermissionDecline;
 
+  @visibleForTesting
+  final PlatformWrapper platform;
+
   IOSNotification? iosNotification;
   AndroidNotification? androidNotification;
-  late PlatformWrapper _platform;
 
   Notificator({
     required this.onNotificationTapCallback,
     this.onPermissionDecline,
-    PlatformWrapper? platform,
     this.iosNotification,
     this.androidNotification,
-  }) {
-    _platform = platform ?? PlatformWrapper();
-    init();
+    PlatformWrapper? platform,
+    MethodChannel? channel,
+  }) : platform = platform ?? PlatformWrapper() {
+    init(methodChannel: channel);
   }
 
   /// Request notification permissions (iOS only).
@@ -98,7 +100,7 @@ class Notificator {
     Map<String, String>? data,
     NotificationSpecifics? notificationSpecifics,
   }) {
-    if (_platform.getPlatform() == TargetPlatform.android) {
+    if (platform.isAndroid) {
       return androidNotification!.show(
         id,
         title,
@@ -107,7 +109,7 @@ class Notificator {
         data,
         notificationSpecifics?.androidNotificationSpecifics,
       );
-    } else if (_platform.getPlatform() == TargetPlatform.iOS) {
+    } else if (platform.isIOS) {
       return iosNotification!.show(
         id,
         title,
@@ -122,17 +124,17 @@ class Notificator {
   }
 
   @visibleForTesting
-  Future init() async {
-    if (_platform.getPlatform() == TargetPlatform.android) {
+  Future init({MethodChannel? methodChannel}) async {
+    if (platform.isAndroid) {
       androidNotification ??= AndroidNotification(
-        channel: _channel,
+        channel: methodChannel ?? _channel,
         onNotificationTap: onNotificationTapCallback,
       );
 
       return androidNotification!.init();
-    } else if (_platform.getPlatform() == TargetPlatform.iOS) {
+    } else if (platform.isIOS) {
       iosNotification ??= IOSNotification(
-        channel: _channel,
+        channel: methodChannel ?? _channel,
         onNotificationTap: onNotificationTapCallback,
         onPermissionDecline: onPermissionDecline,
       );

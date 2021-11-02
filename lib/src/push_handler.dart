@@ -12,8 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:push_notification/push_notification.dart';
 import 'package:push_notification/src/base/base_messaging_service.dart';
 import 'package:push_notification/src/base/push_handle_strategy_factory.dart';
@@ -35,20 +34,20 @@ class PushHandler {
   final BehaviorSubject<PushHandleStrategy> selectNotificationSubject =
       BehaviorSubject();
 
+  @visibleForTesting
+  final PlatformWrapper platform;
+
   final PushHandleStrategyFactory _strategyFactory;
   final NotificationController _notificationController;
   final BaseMessagingService _messagingService;
-
-  late PlatformWrapper _platform;
 
   PushHandler(
     this._strategyFactory,
     this._notificationController,
     this._messagingService, {
     PlatformWrapper? platform,
-  }) {
+  }) : platform = platform ?? PlatformWrapper() {
     _messagingService.initNotification(handleMessage);
-    _platform = platform ?? PlatformWrapper();
   }
 
   /// Request permission for show notification.
@@ -58,7 +57,7 @@ class PushHandler {
     bool? soundPemission,
     bool? alertPermission,
   }) {
-    if (_platform.getPlatform() == TargetPlatform.iOS) {
+    if (platform.isIOS) {
       return _notificationController.requestPermissions(
         requestSoundPermission: soundPemission,
         requestAlertPermission: alertPermission,

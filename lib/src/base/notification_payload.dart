@@ -20,6 +20,7 @@ abstract class NotificationPayload {
   /// Fields required to show notification.
   final String title;
   final String body;
+
   final String? imageUrl;
 
   const NotificationPayload(
