@@ -12,11 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:flutter/cupertino.dart';
 import 'package:push_notification/push_notification.dart';
 import 'package:push_notification/src/base/base_messaging_service.dart';
 import 'package:push_notification/src/base/push_handle_strategy_factory.dart';
 import 'package:push_notification/src/notification/notification_controller.dart';
 import 'package:push_notification/src/push_navigator_holder.dart';
+import 'package:push_notification/src/util/platform_wrapper.dart';
 import 'package:rxdart/subjects.dart';
 
 typedef HandleMessageFunction = void Function(
@@ -24,13 +26,16 @@ typedef HandleMessageFunction = void Function(
   MessageHandlerType handlerType,
 );
 
-/// Notification handling
+/// Notification handling.
 class PushHandler {
-  /// The ability to directly subscribe to receive messages
+  /// The ability to directly subscribe to receive messages.
   final PublishSubject<Map<String, dynamic>> messageSubject = PublishSubject();
 
   final BehaviorSubject<PushHandleStrategy> selectNotificationSubject =
       BehaviorSubject();
+
+  @visibleForTesting
+  final PlatformWrapper platform;
 
   final PushHandleStrategyFactory _strategyFactory;
   final NotificationController _notificationController;
@@ -39,27 +44,32 @@ class PushHandler {
   PushHandler(
     this._strategyFactory,
     this._notificationController,
-    this._messagingService,
-  ) {
+    this._messagingService, {
+    PlatformWrapper? platform,
+  }) : platform = platform ?? PlatformWrapper() {
     _messagingService.initNotification(handleMessage);
   }
 
-  /// request permission for show notification
-  /// soundPemission - is play sound
-  /// alertPermission - is show alert
+  /// Request permission for show notification.
+  /// [soundPemission] - is play sound.
+  /// [alertPermission] - is show alert.
   Future<bool?> requestPermissions({
     bool? soundPemission,
     bool? alertPermission,
   }) {
-    return _notificationController.requestPermissions(
-      requestSoundPermission: soundPemission,
-      requestAlertPermission: alertPermission,
-    );
+    if (platform.isIOS) {
+      return _notificationController.requestPermissions(
+        requestSoundPermission: soundPemission,
+        requestAlertPermission: alertPermission,
+      );
+    } else {
+      return Future.value(null);
+    }
   }
 
-  /// display local notification
+  /// Display local notification.
   /// MessagingService calls this method to display the notification that
-  /// came from message service
+  /// came from message service.
   void handleMessage(
     Map<String, dynamic> message,
     MessageHandlerType handlerType, {

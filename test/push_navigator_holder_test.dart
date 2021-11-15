@@ -12,26 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:flutter/material.dart';
-import 'package:push_demo/ui/message_screen.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:push_notification/push_notification.dart';
 
-class MyApp extends StatelessWidget {
-  final PushHandler _pushHandler;
+void main() {
+  test(
+    'PushNavigatorHolder.instance method call should always return the same '
+    'PushNavigatorHolder instance',
+    () {
+      final firstInstancePushNavigatorHolder = PushNavigatorHolder.instance;
+      final secondInstancePushNavigatorHolder = PushNavigatorHolder.instance;
 
-  const MyApp(this._pushHandler, {Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorObservers: [
-        PushObserver(),
-      ],
-      title: 'Push demo',
-      theme: ThemeData(
-        primarySwatch: Colors.indigo,
-      ),
-      home: MessageScreen(_pushHandler),
-    );
-  }
+      expect(firstInstancePushNavigatorHolder, PushNavigatorHolder());
+      expect(secondInstancePushNavigatorHolder, PushNavigatorHolder());
+      expect(
+        firstInstancePushNavigatorHolder,
+        same(secondInstancePushNavigatorHolder),
+      );
+    },
+  );
 }

@@ -12,19 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:push_notification/src/notification/notificator/ios/ios_notification_specifics.dart';
 import 'package:push_notification/src/notification/notificator/notificator.dart';
 
-/// Notifications for the ios platform
+/// Notifications for the iOS platform.
 class IOSNotification {
-  /// MethodChannel for connecting to ios native platform
+  /// MethodChannel for connecting to iOS native platform.
   final MethodChannel channel;
 
-  /// Callback notification push
+  /// Callback notification push.
   final OnNotificationTapCallback onNotificationTap;
 
-  /// Callback notification decline
+  /// Callback on notification decline.
   final OnPermissionDeclineCallback? onPermissionDecline;
 
   IOSNotification({
@@ -33,27 +34,19 @@ class IOSNotification {
     this.onPermissionDecline,
   });
 
+  /// Initialize notification.
+  ///
+  /// Initializes notification parameters.
   Future init() async {
     channel.setMethodCallHandler(
-      (call) async {
-        switch (call.method) {
-          case openCallback:
-            onNotificationTap(call.arguments as Map);
-            break;
-          case permissionDeclineCallback:
-            if (onPermissionDecline != null) {
-              onPermissionDecline!();
-            }
-            break;
-        }
-      },
+      methodCallHandlerCallback,
     );
   }
 
-  /// Request permissions
+  /// Request permissions.
   ///
-  /// requestSoundPermission - is play sound
-  /// requestSoundPermission - is show alert
+  /// [requestSoundPermission] - is play sound.
+  /// [requestAlertPermission] - is show alert.
   Future<bool?> requestPermissions({
     bool? requestSoundPermission,
     bool? requestAlertPermission,
@@ -66,10 +59,13 @@ class IOSNotification {
         },
       );
 
-  /// Show notification
-  /// id - notification identifier
-  /// title - title
-  /// body - the main text of the notification
+  /// Show notification.
+  ///
+  /// [id] - notification identifier.
+  /// [title] - title.
+  /// [body] - the main text of the notification.
+  /// [data] - data for notification.
+  /// [notificationSpecifics] - notification specifics.
   Future show(
     int id,
     String title,
@@ -88,4 +84,18 @@ class IOSNotification {
           dataArg: data,
         },
       );
+
+  @visibleForTesting
+  Future<dynamic> methodCallHandlerCallback(MethodCall call) async {
+    switch (call.method) {
+      case openCallback:
+        onNotificationTap(call.arguments as Map);
+        break;
+      case permissionDeclineCallback:
+        if (onPermissionDecline != null) {
+          onPermissionDecline!();
+        }
+        break;
+    }
+  }
 }
