@@ -197,6 +197,29 @@ void main() {
       );
 
       test(
+        'Method call requestPermissions not for iOS should return true',
+        () async {
+          when(() => platform.isAndroid).thenReturn(true);
+          when(() => platform.isIOS).thenReturn(false);
+
+          notificator = Notificator(
+            onNotificationTapCallback: (notificationData) {},
+            onPermissionDecline: () {},
+            platform: platform,
+            androidNotification: androidNotification,
+            channel: methodChannel,
+          );
+
+          final response = await notificator.requestPermissions(
+            requestSoundPermission: false,
+            requestAlertPermission: true,
+          );
+
+          expect(response, true);
+        },
+      );
+
+      test(
         'Method show should work correctly',
         () {
           when(() => platform.isAndroid).thenReturn(false);

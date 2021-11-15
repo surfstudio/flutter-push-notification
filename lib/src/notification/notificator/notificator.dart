@@ -79,10 +79,14 @@ class Notificator {
     bool? requestSoundPermission,
     bool? requestAlertPermission,
   }) {
-    return iosNotification!.requestPermissions(
-      requestSoundPermission: requestSoundPermission,
-      requestAlertPermission: requestAlertPermission,
-    );
+    if (!platform.isIOS) {
+      return Future.value(true);
+    } else {
+      return iosNotification!.requestPermissions(
+        requestSoundPermission: requestSoundPermission,
+        requestAlertPermission: requestAlertPermission,
+      );
+    }
   }
 
   /// Show notification.
