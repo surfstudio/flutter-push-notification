@@ -13,12 +13,13 @@
 // limitations under the License.
 
 import 'dart:async';
-import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:push_notification/src/notification/notificator/android/android_notification.dart';
 import 'package:push_notification/src/notification/notificator/ios/ios_notification.dart';
 import 'package:push_notification/src/notification/notificator/notification_specifics.dart';
+import 'package:push_notification/src/util/platform_wrapper.dart';
 
 /// Callback notification clicks.
 ///
@@ -56,14 +57,21 @@ class Notificator {
   /// Callback notification decline(iOS only).
   final OnPermissionDeclineCallback? onPermissionDecline;
 
-  late IOSNotification _iosNotification;
-  late AndroidNotification _androidNotification;
+  @visibleForTesting
+  final PlatformWrapper platform;
+
+  IOSNotification? iosNotification;
+  AndroidNotification? androidNotification;
 
   Notificator({
     required this.onNotificationTapCallback,
     this.onPermissionDecline,
-  }) {
-    _init();
+    this.iosNotification,
+    this.androidNotification,
+    PlatformWrapper? platform,
+    MethodChannel? channel,
+  }) : platform = platform ?? PlatformWrapper() {
+    init(methodChannel: channel);
   }
 
   /// Request notification permissions (iOS only).
@@ -71,7 +79,7 @@ class Notificator {
     bool? requestSoundPermission,
     bool? requestAlertPermission,
   }) {
-    return _iosNotification.requestPermissions(
+    return iosNotification!.requestPermissions(
       requestSoundPermission: requestSoundPermission,
       requestAlertPermission: requestAlertPermission,
     );
@@ -92,45 +100,46 @@ class Notificator {
     Map<String, String>? data,
     NotificationSpecifics? notificationSpecifics,
   }) {
-    if (Platform.isAndroid) {
-      return _androidNotification.show(
+    if (platform.isAndroid) {
+      return androidNotification!.show(
         id,
         title,
         body,
         imageUrl,
         data,
-        notificationSpecifics!.androidNotificationSpecifics,
+        notificationSpecifics?.androidNotificationSpecifics,
       );
-    } else if (Platform.isIOS) {
-      return _iosNotification.show(
+    } else if (platform.isIOS) {
+      return iosNotification!.show(
         id,
         title,
         body,
         imageUrl,
         data,
-        notificationSpecifics!.iosNotificationSpecifics,
+        notificationSpecifics?.iosNotificationSpecifics,
       );
     }
 
     return Future<void>.value();
   }
 
-  Future _init() async {
-    if (Platform.isAndroid) {
-      _androidNotification = AndroidNotification(
-        channel: _channel,
+  @visibleForTesting
+  Future init({MethodChannel? methodChannel}) async {
+    if (platform.isAndroid) {
+      androidNotification ??= AndroidNotification(
+        channel: methodChannel ?? _channel,
         onNotificationTap: onNotificationTapCallback,
       );
 
-      return _androidNotification.init();
-    } else if (Platform.isIOS) {
-      _iosNotification = IOSNotification(
-        channel: _channel,
+      return androidNotification!.init();
+    } else if (platform.isIOS) {
+      iosNotification ??= IOSNotification(
+        channel: methodChannel ?? _channel,
         onNotificationTap: onNotificationTapCallback,
         onPermissionDecline: onPermissionDecline,
       );
 
-      return _iosNotification.init();
+      return iosNotification!.init();
     }
   }
 }

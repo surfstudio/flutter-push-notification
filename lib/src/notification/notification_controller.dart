@@ -14,6 +14,7 @@
 
 import 'dart:collection';
 
+import 'package:flutter/cupertino.dart';
 import 'package:push_notification/src/base/push_handle_strategy.dart';
 import 'package:push_notification/src/notification/notificator/android/android_notiffication_specifics.dart';
 import 'package:push_notification/src/notification/notificator/notification_specifics.dart';
@@ -28,13 +29,18 @@ class NotificationController {
   Map<int, NotificationCallback> callbackMap =
       HashMap<int, NotificationCallback>();
 
-  late Notificator _notificator;
+  @visibleForTesting
+  late Notificator notificator;
 
-  NotificationController(OnPermissionDeclineCallback onPermissionDecline) {
-    _notificator = Notificator(
-      onNotificationTapCallback: _internalOnSelectNotification,
-      onPermissionDecline: onPermissionDecline,
-    );
+  NotificationController(
+    OnPermissionDeclineCallback onPermissionDecline, {
+    Notificator? transmittedNotificator,
+  }) {
+    notificator = transmittedNotificator ??
+        Notificator(
+          onNotificationTapCallback: internalOnSelectNotification,
+          onPermissionDecline: onPermissionDecline,
+        );
   }
 
   /// Request notification permissions (iOS only).
@@ -42,7 +48,7 @@ class NotificationController {
     bool? requestSoundPermission,
     bool? requestAlertPermission,
   }) {
-    return _notificator.requestPermissions(
+    return notificator.requestPermissions(
       requestSoundPermission: requestSoundPermission,
       requestAlertPermission: requestAlertPermission,
     );
@@ -82,7 +88,7 @@ class NotificationController {
     tmpPayload[pushIdParam] = '$pushId';
     callbackMap[pushId] = onSelectNotification;
 
-    return _notificator.show(
+    return notificator.show(
       strategy.pushId,
       strategy.payload.title,
       strategy.payload.body,
@@ -92,7 +98,8 @@ class NotificationController {
     );
   }
 
-  void _internalOnSelectNotification(Map<dynamic, dynamic>? payload) {
+  @visibleForTesting
+  void internalOnSelectNotification(Map<dynamic, dynamic>? payload) {
     // ignore: avoid_print
     print('DEV_INFO onSelectNotification, payload: $payload');
 

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:push_notification/src/notification/notificator/ios/ios_notification_specifics.dart';
 import 'package:push_notification/src/notification/notificator/notificator.dart';
@@ -38,18 +39,7 @@ class IOSNotification {
   /// Initializes notification parameters.
   Future init() async {
     channel.setMethodCallHandler(
-      (call) async {
-        switch (call.method) {
-          case openCallback:
-            onNotificationTap(call.arguments as Map);
-            break;
-          case permissionDeclineCallback:
-            if (onPermissionDecline != null) {
-              onPermissionDecline!();
-            }
-            break;
-        }
-      },
+      methodCallHandlerCallback,
     );
   }
 
@@ -94,4 +84,18 @@ class IOSNotification {
           dataArg: data,
         },
       );
+
+  @visibleForTesting
+  Future<dynamic> methodCallHandlerCallback(MethodCall call) async {
+    switch (call.method) {
+      case openCallback:
+        onNotificationTap(call.arguments as Map);
+        break;
+      case permissionDeclineCallback:
+        if (onPermissionDecline != null) {
+          onPermissionDecline!();
+        }
+        break;
+    }
+  }
 }

@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:io';
-
+import 'package:flutter/cupertino.dart';
 import 'package:push_notification/push_notification.dart';
 import 'package:push_notification/src/base/base_messaging_service.dart';
 import 'package:push_notification/src/base/push_handle_strategy_factory.dart';
 import 'package:push_notification/src/notification/notification_controller.dart';
 import 'package:push_notification/src/push_navigator_holder.dart';
+import 'package:push_notification/src/util/platform_wrapper.dart';
 import 'package:rxdart/subjects.dart';
 
 typedef HandleMessageFunction = void Function(
@@ -34,6 +34,9 @@ class PushHandler {
   final BehaviorSubject<PushHandleStrategy> selectNotificationSubject =
       BehaviorSubject();
 
+  @visibleForTesting
+  final PlatformWrapper platform;
+
   final PushHandleStrategyFactory _strategyFactory;
   final NotificationController _notificationController;
   final BaseMessagingService _messagingService;
@@ -41,8 +44,9 @@ class PushHandler {
   PushHandler(
     this._strategyFactory,
     this._notificationController,
-    this._messagingService,
-  ) {
+    this._messagingService, {
+    PlatformWrapper? platform,
+  }) : platform = platform ?? PlatformWrapper() {
     _messagingService.initNotification(handleMessage);
   }
 
@@ -53,13 +57,13 @@ class PushHandler {
     bool? soundPemission,
     bool? alertPermission,
   }) {
-    if(Platform.isIOS) {
+    if (platform.isIOS) {
       return _notificationController.requestPermissions(
         requestSoundPermission: soundPemission,
         requestAlertPermission: alertPermission,
       );
     } else {
-     return Future.value(null);
+      return Future.value(null);
     }
   }
 

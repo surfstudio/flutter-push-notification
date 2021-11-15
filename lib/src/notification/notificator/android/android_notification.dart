@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:push_notification/src/notification/notificator/android/android_notiffication_specifics.dart';
 import 'package:push_notification/src/notification/notificator/notificator.dart';
 
@@ -34,14 +35,7 @@ class AndroidNotification {
   /// Initializes notification parameters and listening clicks.
   Future init() async {
     channel.setMethodCallHandler(
-      (call) async {
-        switch (call.method) {
-          case openCallback:
-            final notificationData = call.arguments as Map;
-            onNotificationTap(notificationData);
-            break;
-        }
-      },
+      methodCallHandlerCallback,
     );
     return channel.invokeMethod<dynamic>(callInit);
   }
@@ -59,7 +53,7 @@ class AndroidNotification {
     String body,
     String? imageUrl,
     Map<String, String>? data,
-    AndroidNotificationSpecifics notificationSpecifics,
+    AndroidNotificationSpecifics? notificationSpecifics,
   ) async {
     return channel.invokeMethod<dynamic>(
       callShow,
@@ -69,8 +63,18 @@ class AndroidNotification {
         bodyArg: body,
         imageUrlArg: imageUrl,
         dataArg: data,
-        notificationSpecificsArg: notificationSpecifics.toMap(),
+        notificationSpecificsArg: notificationSpecifics?.toMap(),
       },
     );
+  }
+
+  @visibleForTesting
+  Future<dynamic> methodCallHandlerCallback(MethodCall call) async {
+    switch (call.method) {
+      case openCallback:
+        final notificationData = call.arguments as Map;
+        onNotificationTap(notificationData);
+        break;
+    }
   }
 }

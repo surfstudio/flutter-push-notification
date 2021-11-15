@@ -1,7 +1,7 @@
 # Push Notification
 
-[![Build Status](https://shields.io/github/workflow/status/surfstudio/SurfGear/build?logo=github&logoColor=white)](https://github.com/surfstudio/flutter-push-notification)
-[![Coverage Status](https://img.shields.io/codecov/c/github/surfstudio/SurfGear?flag=push_notification&logo=codecov&logoColor=white)](https://app.codecov.io/gh/surfstudio/flutter-push-notification)
+[![Build Status](https://shields.io/github/workflow/status/surfstudio/flutter-push-notification/build?logo=github&logoColor=white)](https://github.com/surfstudio/flutter-push-notification)
+[![Coverage Status](https://img.shields.io/codecov/c/github/surfstudio/flutter-push-notification?logo=codecov&logoColor=white)](https://app.codecov.io/gh/surfstudio/flutter-push-notification)
 [![Pub Version](https://img.shields.io/pub/v/push_notification?logo=dart&logoColor=white)](https://pub.dev/packages/push_notification)
 [![Pub Likes](https://badgen.net/pub/likes/push_notification)](https://pub.dev/packages/push_notification)
 [![Pub popularity](https://badgen.net/pub/popularity/push_notification)](https://pub.dev/packages/push_notification/score)
