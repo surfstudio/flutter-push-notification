@@ -4,7 +4,6 @@ description: Library for implementing push notifications. The module contains th
 repository: "https://github.com/surfstudio/flutter-push-notification"
 issue_tracker: "https://github.com/surfstudio/flutter-push-notification/issues"
 
-
 dependencies:
   flutter:
     sdk: flutter
