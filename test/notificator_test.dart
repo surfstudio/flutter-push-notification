@@ -169,7 +169,7 @@ void main() {
 
       test(
         'Method requestPermissions should work correctly',
-            () {
+        () {
           when(() => platform.isAndroid).thenReturn(false);
           when(() => platform.isIOS).thenReturn(true);
 
@@ -179,16 +179,16 @@ void main() {
             iosNotification: iosNotification,
             platform: platform,
           )..requestPermissions(
-            requestSoundPermission: false,
-            requestAlertPermission: true,
-          );
+              requestSoundPermission: false,
+              requestAlertPermission: true,
+            );
 
           final args = verify(
-                () => iosNotification.requestPermissions(
+            () => iosNotification.requestPermissions(
               requestSoundPermission:
-              captureAny(named: 'requestSoundPermission'),
+                  captureAny(named: 'requestSoundPermission'),
               requestAlertPermission:
-              captureAny(named: 'requestAlertPermission'),
+                  captureAny(named: 'requestAlertPermission'),
             ),
           ).captured;
 
@@ -198,7 +198,7 @@ void main() {
 
       test(
         'Method call requestPermissions not for iOS should return true',
-            () async {
+        () async {
           when(() => platform.isAndroid).thenReturn(true);
           when(() => platform.isIOS).thenReturn(false);
 
@@ -210,7 +210,7 @@ void main() {
             channel: methodChannel,
           );
 
-           final response = await notificator.requestPermissions(
+          final response = await notificator.requestPermissions(
             requestSoundPermission: false,
             requestAlertPermission: true,
           );
