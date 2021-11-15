@@ -12,8 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// Android notification settings
+/// Android notification settings.
 class AndroidNotificationSpecifics {
+  /// Icon drawable.
+  ///
+  /// @mipmap/ic_launcher
+  final String? icon;
+
+  /// Channel id.
+  ///
+  /// @string/notification_channel_id
+  final String? channelId;
+
+  /// Channel name.
+  ///
+  /// @string/notification_channel_name
+  final String? channelName;
+
+  /// Icon color.
+  ///
+  /// @color/notification_color
+  final String? color;
+
+  /// Notification is auto cancel.
+  final bool? autoCancelable;
+
   AndroidNotificationSpecifics({
     this.icon,
     this.channelId,
@@ -21,29 +44,6 @@ class AndroidNotificationSpecifics {
     this.color,
     this.autoCancelable,
   });
-
-  ///Icon drawable
-  ///
-  /// @mipmap/ic_launcher
-  final String? icon;
-
-  /// channelId
-  ///
-  /// @string/notification_channel_id
-  final String? channelId;
-
-  /// Channel name
-  ///
-  /// @string/notification_channel_name
-  final String? channelName;
-
-  /// Icon color
-  ///
-  /// @color/notification_color
-  final String? color;
-
-  /// Notification is auto cancel
-  final bool? autoCancelable;
 
   Map<String, Object?> toMap() {
     return {

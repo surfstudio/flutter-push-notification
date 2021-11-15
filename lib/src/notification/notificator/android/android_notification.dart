@@ -13,52 +13,47 @@
 // limitations under the License.
 
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:push_notification/src/notification/notificator/android/android_notiffication_specifics.dart';
 import 'package:push_notification/src/notification/notificator/notificator.dart';
 
-/// Notifications for the android platform
+/// Notifications for the Android platform.
 class AndroidNotification {
+  /// MethodChannel for connecting to android native code.
+  final MethodChannel channel;
+
+  /// Callback notification push.
+  final OnNotificationTapCallback onNotificationTap;
+
   AndroidNotification({
     required this.channel,
     required this.onNotificationTap,
   });
 
-  /// MethodChannel for connecting to android native code
-  final MethodChannel channel;
-
-  /// Callback notification push
-  final OnNotificationTapCallback onNotificationTap;
-
-  /// Initialize notification
+  /// Initialize notification.
   ///
-  /// Initializes notification parameters and click listener
+  /// Initializes notification parameters and listening clicks.
   Future init() async {
     channel.setMethodCallHandler(
-      (call) async {
-        switch (call.method) {
-          case openCallback:
-            final notificationData = call.arguments as Map;
-            onNotificationTap(notificationData);
-            break;
-        }
-      },
+      methodCallHandlerCallback,
     );
     return channel.invokeMethod<dynamic>(callInit);
   }
 
-  /// Show notification
+  /// Show notification.
   ///
-  /// id - notification identifier
-  /// title - title
-  /// body - the main text of the notification
-  /// notificationDetails - notification details
+  /// [id] - notification identifier.
+  /// [title] - title.
+  /// [body] - the main text of the notification.
+  /// [data] - data for notification.
+  /// [notificationSpecifics] - notification specifics.
   Future show(
     int id,
     String title,
     String body,
     String? imageUrl,
     Map<String, String>? data,
-    AndroidNotificationSpecifics notificationSpecifics,
+    AndroidNotificationSpecifics? notificationSpecifics,
   ) async {
     return channel.invokeMethod<dynamic>(
       callShow,
@@ -68,8 +63,18 @@ class AndroidNotification {
         bodyArg: body,
         imageUrlArg: imageUrl,
         dataArg: data,
-        notificationSpecificsArg: notificationSpecifics.toMap(),
+        notificationSpecificsArg: notificationSpecifics?.toMap(),
       },
     );
+  }
+
+  @visibleForTesting
+  Future<dynamic> methodCallHandlerCallback(MethodCall call) async {
+    switch (call.method) {
+      case openCallback:
+        final notificationData = call.arguments as Map;
+        onNotificationTap(notificationData);
+        break;
+    }
   }
 }

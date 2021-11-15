@@ -13,30 +13,33 @@
 // limitations under the License.
 
 import 'dart:async';
-import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:push_notification/src/notification/notificator/android/android_notification.dart';
 import 'package:push_notification/src/notification/notificator/ios/ios_notification.dart';
 import 'package:push_notification/src/notification/notificator/notification_specifics.dart';
+import 'package:push_notification/src/util/platform_wrapper.dart';
 
-/// Callback notification clicks
+/// Callback notification clicks.
 ///
-/// notificationData - notification data
+/// [notificationData] - notification data.
 typedef OnNotificationTapCallback = void Function(Map notificationData);
 
-/// Callback permission decline
+/// Callback on permission decline.
 typedef OnPermissionDeclineCallback = void Function();
 
-/// Channels and methods names
+/// Channel name.
 const String channelName = 'surf_notification';
+
+/// Methods names.
 const String callInit = 'initialize';
 const String callShow = 'show';
 const String callRequest = 'request';
 const String openCallback = 'notificationOpen';
 const String permissionDeclineCallback = 'permissionDecline';
 
-/// Arguments names
+/// Arguments names.
 const String pushIdArg = 'pushId';
 const String titleArg = 'title';
 const String bodyArg = 'body';
@@ -44,65 +47,51 @@ const String imageUrlArg = 'imageUrl';
 const String dataArg = 'data';
 const String notificationSpecificsArg = 'notificationSpecifics';
 
-/// Util for displaying notifications for android and ios
+/// Util for displaying notifications for Android and iOS.
 class Notificator {
+  static const _channel = MethodChannel(channelName);
+
+  /// Callback notification clicks.
+  final OnNotificationTapCallback onNotificationTapCallback;
+
+  /// Callback notification decline(iOS only).
+  final OnPermissionDeclineCallback? onPermissionDecline;
+
+  @visibleForTesting
+  final PlatformWrapper platform;
+
+  IOSNotification? iosNotification;
+  AndroidNotification? androidNotification;
+
   Notificator({
     required this.onNotificationTapCallback,
     this.onPermissionDecline,
-  }) {
-    _init();
+    this.iosNotification,
+    this.androidNotification,
+    PlatformWrapper? platform,
+    MethodChannel? channel,
+  }) : platform = platform ?? PlatformWrapper() {
+    init(methodChannel: channel);
   }
 
-  static const _channel = MethodChannel(channelName);
-  late IOSNotification _iosNotification;
-  late AndroidNotification _androidNotification;
-
-  /// Callback notification clicks
-  final OnNotificationTapCallback onNotificationTapCallback;
-
-  /// Callback notification decline(ios only)
-  final OnPermissionDeclineCallback? onPermissionDecline;
-
-  Future _init() async {
-    if (Platform.isAndroid) {
-      _androidNotification = AndroidNotification(
-        channel: _channel,
-        onNotificationTap: onNotificationTapCallback,
-      );
-
-      return _androidNotification.init();
-    } else if (Platform.isIOS) {
-      _iosNotification = IOSNotification(
-        channel: _channel,
-        onNotificationTap: onNotificationTapCallback,
-        onPermissionDecline: onPermissionDecline,
-      );
-
-      return _iosNotification.init();
-    }
-  }
-
-  /// Request notification permissions (iOS only)
+  /// Request notification permissions (iOS only).
   Future<bool?> requestPermissions({
     bool? requestSoundPermission,
     bool? requestAlertPermission,
   }) {
-    if (Platform.isAndroid) {
-      return Future.value(true);
-    }
-
-    return _iosNotification.requestPermissions(
+    return iosNotification!.requestPermissions(
       requestSoundPermission: requestSoundPermission,
       requestAlertPermission: requestAlertPermission,
     );
   }
 
-  /// Request to display notifications
+  /// Show notification.
   ///
-  /// id - notification identifier
-  /// title - title
-  /// body - the main text of the notification
-  /// data - data for notification
+  /// [id] - notification identifier.
+  /// [title] - title.
+  /// [body] - the main text of the notification.
+  /// [data] - data for notification.
+  /// [notificationSpecifics] - notification specifics.
   Future show(
     int id,
     String title,
@@ -111,26 +100,46 @@ class Notificator {
     Map<String, String>? data,
     NotificationSpecifics? notificationSpecifics,
   }) {
-    if (Platform.isAndroid) {
-      return _androidNotification.show(
+    if (platform.isAndroid) {
+      return androidNotification!.show(
         id,
         title,
         body,
         imageUrl,
         data,
-        notificationSpecifics!.androidNotificationSpecifics,
+        notificationSpecifics?.androidNotificationSpecifics,
       );
-    } else if (Platform.isIOS) {
-      return _iosNotification.show(
+    } else if (platform.isIOS) {
+      return iosNotification!.show(
         id,
         title,
         body,
         imageUrl,
         data,
-        notificationSpecifics!.iosNotificationSpecifics,
+        notificationSpecifics?.iosNotificationSpecifics,
       );
     }
 
     return Future<void>.value();
+  }
+
+  @visibleForTesting
+  Future init({MethodChannel? methodChannel}) async {
+    if (platform.isAndroid) {
+      androidNotification ??= AndroidNotification(
+        channel: methodChannel ?? _channel,
+        onNotificationTap: onNotificationTapCallback,
+      );
+
+      return androidNotification!.init();
+    } else if (platform.isIOS) {
+      iosNotification ??= IOSNotification(
+        channel: methodChannel ?? _channel,
+        onNotificationTap: onNotificationTapCallback,
+        onPermissionDecline: onPermissionDecline,
+      );
+
+      return iosNotification!.init();
+    }
   }
 }

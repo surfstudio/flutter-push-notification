@@ -19,6 +19,7 @@ void main() => runApp(const MyApp());
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -26,8 +27,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late Notificator notification;
 
-  String _bodyText = 'notification test';
   String notificationKey = 'key';
+  String _bodyText = 'notification test';
 
   @override
   void initState() {

@@ -12,27 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:flutter_test/flutter_test.dart';
 import 'package:push_notification/push_notification.dart';
 
-class Message extends NotificationPayload {
-  final int extraInt;
-  final double extraDouble;
+void main() {
+  test(
+    'PushNavigatorHolder.instance method call should always return the same '
+    'PushNavigatorHolder instance',
+    () {
+      final firstInstancePushNavigatorHolder = PushNavigatorHolder.instance;
+      final secondInstancePushNavigatorHolder = PushNavigatorHolder.instance;
 
-  const Message(
-    Map<String, dynamic> messageData,
-    String title,
-    String body,
-    this.extraInt,
-    this.extraDouble,
-  ) : super(messageData, title, body);
-
-  factory Message.fromMap(Map<String, dynamic> map) {
-    return Message(
-      map,
-      (map['notification'] as Map<String, dynamic>)['title'] as String,
-      (map['notification'] as Map<String, dynamic>)['body'] as String,
-      map['extraInt'] as int,
-      map['extraDouble'] as double,
-    );
-  }
+      expect(firstInstancePushNavigatorHolder, PushNavigatorHolder());
+      expect(secondInstancePushNavigatorHolder, PushNavigatorHolder());
+      expect(
+        firstInstancePushNavigatorHolder,
+        same(secondInstancePushNavigatorHolder),
+      );
+    },
+  );
 }

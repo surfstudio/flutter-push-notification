@@ -12,42 +12,80 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:io';
-
+import 'package:flutter/cupertino.dart';
 import 'package:push_notification/src/base/push_handle_strategy.dart';
+import 'package:push_notification/src/util/platform_wrapper.dart';
 
-/// strategy builder function
+/// Strategy builder function.
 typedef StrategyBuilder = PushHandleStrategy Function(
   Map<String, dynamic> payload,
 );
 
-/// Abstract factory for push notification strategies
+/// Abstract factory for push notification strategies.
 abstract class PushHandleStrategyFactory {
-  /// Action key in data firebase's push
+  /// Action key in data firebase's push.
   /// You can customize your format in the factory implementation.
   static const _key = 'event';
 
-  /// Default strategy, if in the notification is no strategy information
+  /// Wrapper for Platform io.
+  @visibleForTesting
+  final PlatformWrapper platform;
+
+  /// Default strategy, if in the notification is no strategy information.
   StrategyBuilder get defaultStrategy;
 
-  /// Override with the necessary matching actions and strategy builder
+  /// Override with the necessary matching actions and strategy builder.
   Map<String, StrategyBuilder> get map => {};
 
-  /// Returns a strategy from push data
+  PushHandleStrategyFactory({PlatformWrapper? platformWrapper})
+      : platform = platformWrapper ?? PlatformWrapper();
+
+  /// Returns a strategy from push data.
   PushHandleStrategy createByData(Map<String, dynamic> messageData) {
     StrategyBuilder? builder;
     try {
-      if (Platform.isAndroid) {
-        builder = map[(messageData['data'] as Map)[_key]];
-      } else if (Platform.isIOS) {
-        builder = map[messageData[_key]];
-      }
+      builder = _getStrategyBuilder(messageData);
 
       return builder!(messageData);
     } on Exception catch (e) {
       // ignore: avoid_print
       print('$e - cant found $_key');
       return defaultStrategy(messageData);
+    }
+  }
+
+  StrategyBuilder? _getStrategyBuilder(Map<String, dynamic> messageData) {
+    final dynamic value = messageData['data'];
+
+    if ((value is Map<String, dynamic> && value.containsKey(_key)) ||
+        messageData.containsKey(_key)) {
+      if (platform.isAndroid) {
+        return _getStrategyIfAndroid(messageData);
+      } else if (platform.isIOS) {
+        return _getStrategyIfIOS(messageData);
+      }
+    } else {
+      throw Exception('Other type expected');
+    }
+  }
+
+  StrategyBuilder? _getStrategyIfAndroid(Map<String, dynamic> messageData) {
+    final value = map[(messageData['data'] as Map)[_key]];
+
+    if (value != null) {
+      return map[(messageData['data'] as Map)[_key]];
+    } else {
+      throw Exception('Other type expected');
+    }
+  }
+
+  StrategyBuilder? _getStrategyIfIOS(Map<String, dynamic> messageData) {
+    final value = map[messageData[_key]];
+
+    if (value != null) {
+      return value;
+    } else {
+      throw Exception('Other type expected');
     }
   }
 }

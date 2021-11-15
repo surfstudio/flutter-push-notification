@@ -12,20 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// notification base payload data
+/// Notification base payload data.
 abstract class NotificationPayload {
+  /// Original message.
+  final Map<String, dynamic> messageData;
+
+  /// Fields required to show notification.
+  final String title;
+  final String body;
+
+  final String? imageUrl;
+
   const NotificationPayload(
     this.messageData,
     this.title,
     this.body, {
     this.imageUrl,
   });
-
-  /// original message
-  final Map<String, dynamic> messageData;
-
-  /// field required to show notification
-  final String title;
-  final String body;
-  final String? imageUrl;
 }

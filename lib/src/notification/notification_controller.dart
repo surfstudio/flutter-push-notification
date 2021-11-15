@@ -14,6 +14,7 @@
 
 import 'dart:collection';
 
+import 'package:flutter/cupertino.dart';
 import 'package:push_notification/src/base/push_handle_strategy.dart';
 import 'package:push_notification/src/notification/notificator/android/android_notiffication_specifics.dart';
 import 'package:push_notification/src/notification/notificator/notification_specifics.dart';
@@ -23,32 +24,37 @@ typedef NotificationCallback = void Function(Map<String, dynamic> payload);
 
 const String pushIdParam = 'localPushId';
 
-/// Wrapper over surf notifications
+/// Wrapper over surf notifications.
 class NotificationController {
-  NotificationController(OnPermissionDeclineCallback onPermissionDecline) {
-    _notificator = Notificator(
-      onNotificationTapCallback: _internalOnSelectNotification,
-      onPermissionDecline: onPermissionDecline,
-    );
-  }
-
-  late Notificator _notificator;
-
   Map<int, NotificationCallback> callbackMap =
       HashMap<int, NotificationCallback>();
 
-  /// Request notification permissions (iOS only)
+  @visibleForTesting
+  late Notificator notificator;
+
+  NotificationController(
+    OnPermissionDeclineCallback onPermissionDecline, {
+    Notificator? transmittedNotificator,
+  }) {
+    notificator = transmittedNotificator ??
+        Notificator(
+          onNotificationTapCallback: internalOnSelectNotification,
+          onPermissionDecline: onPermissionDecline,
+        );
+  }
+
+  /// Request notification permissions (iOS only).
   Future<bool?> requestPermissions({
     bool? requestSoundPermission,
     bool? requestAlertPermission,
   }) {
-    return _notificator.requestPermissions(
+    return notificator.requestPermissions(
       requestSoundPermission: requestSoundPermission,
       requestAlertPermission: requestAlertPermission,
     );
   }
 
-  /// displaying notification from the strategy
+  /// Displaying notification from the strategy.
   Future<dynamic> show(
     PushHandleStrategy strategy,
     NotificationCallback onSelectNotification,
@@ -82,7 +88,7 @@ class NotificationController {
     tmpPayload[pushIdParam] = '$pushId';
     callbackMap[pushId] = onSelectNotification;
 
-    return _notificator.show(
+    return notificator.show(
       strategy.pushId,
       strategy.payload.title,
       strategy.payload.body,
@@ -92,7 +98,8 @@ class NotificationController {
     );
   }
 
-  void _internalOnSelectNotification(Map<dynamic, dynamic>? payload) {
+  @visibleForTesting
+  void internalOnSelectNotification(Map<dynamic, dynamic>? payload) {
     // ignore: avoid_print
     print('DEV_INFO onSelectNotification, payload: $payload');
 

@@ -1,10 +1,15 @@
 # Changelog
 
-## 1.1.0 - 2021-05-30
+## 1.1.1
+
+* v2 embedded suport
+* internal improvement
+
+## 1.1.0
 
 * Stable release
 
-## 1.0.1-dev.1 - 2021-05-25
+## 1.0.1-dev.1
 
 * Update `rxdart` dependency to `0.27.0`.
 

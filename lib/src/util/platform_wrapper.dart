@@ -12,17 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:push_notification/src/push_handler.dart';
+import 'dart:io';
 
-enum MessageHandlerType {
-  onMessage,
-  onLaunch,
-  onResume,
-}
+/// Wrapper for Platform io.
+class PlatformWrapper {
+  bool get isAndroid => Platform.isAndroid;
 
-/// Base wrapper over any message service.
-// ignore: one_member_abstracts
-abstract class BaseMessagingService {
-  /// No need to call. Initialization is called inside the [PushHandler].
-  void initNotification(HandleMessageFunction handleMessage);
+  bool get isIOS => Platform.isIOS;
 }

@@ -13,13 +13,13 @@
 // limitations under the License.
 
 import 'package:flutter/material.dart';
-import 'package:push_demo/ui/main_screen.dart';
+import 'package:push_demo/ui/message_screen.dart';
 import 'package:push_notification/push_notification.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp(this._pushHandler, {Key? key}) : super(key: key);
-
   final PushHandler _pushHandler;
+
+  const MyApp(this._pushHandler, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

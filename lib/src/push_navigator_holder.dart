@@ -14,15 +14,15 @@
 
 import 'package:flutter/widgets.dart';
 
-/// global navigator context storage
+/// Global navigator context storage.
 class PushNavigatorHolder {
-  factory PushNavigatorHolder() => _instance;
-
-  PushNavigatorHolder._internal();
+  static final _instance = PushNavigatorHolder._internal();
 
   NavigatorState? navigator;
 
-  static final _instance = PushNavigatorHolder._internal();
-
   static PushNavigatorHolder get instance => _instance;
+
+  factory PushNavigatorHolder() => _instance;
+
+  PushNavigatorHolder._internal();
 }

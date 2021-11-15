@@ -16,21 +16,17 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:push_demo/utils/logger.dart';
 import 'package:push_notification/push_notification.dart';
 
-/// Wrapper over [FirebaseMessaging]
+/// Wrapper over [FirebaseMessaging].
 class MessagingService extends BaseMessagingService {
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
-  late HandleMessageFunction _handleMessage;
-
-  Future<String?> get fcmToken => _messaging.getToken();
 
   final List<String> _topicsSubscription = [];
 
-  /// request notification permissions for ios platform
-  void requestNotificationPermissions() {
-    _messaging.requestPermission();
-  }
+  Future<String?> get fcmToken => _messaging.getToken();
 
-  /// no need to call. initialization is called inside the [PushHandler]
+  late HandleMessageFunction _handleMessage;
+
+  /// No need to call. Initialization is called inside the [PushHandler].
   @override
   void initNotification(HandleMessageFunction handleMessage) {
     _handleMessage = handleMessage;
@@ -56,29 +52,34 @@ class MessagingService extends BaseMessagingService {
     );
   }
 
-  /// subscribe to [topic] in background.
+  /// Request notification permissions for iOS platform.
+  void requestNotificationPermissions() {
+    _messaging.requestPermission();
+  }
+
+  /// Subscribe to [topic] in background.
   void subscribeToTopic(String topic) {
     _messaging.subscribeToTopic(topic);
     _topicsSubscription.add(topic);
   }
 
-  /// subscribe on a list of [topics] in background.
-  void subscribeToTopics(List<String> topics) {
+  /// Subscribe on a list of [topics] in background.
+  void subscribeToListTopics(List<String> topics) {
     topics.forEach(subscribeToTopic);
   }
 
-  /// unsubscribe from [topic] in background1.
+  /// Unsubscribe from [topic] in background.
   void unsubscribeFromTopic(String topic) {
     _messaging.unsubscribeFromTopic(topic);
     _topicsSubscription.remove(topic);
   }
 
-  /// unsubscribe from [topics]
-  void unsubscribeFromTopics(List<String> topics) {
+  /// Unsubscribe from list of [topics].
+  void unsubscribeFromListTopics(List<String> topics) {
     topics.forEach(unsubscribeFromTopic);
   }
 
-  /// unsubscribe from all topics
+  /// Unsubscribe from all topics.
   void unsubscribe() {
     _topicsSubscription.forEach(unsubscribeFromTopic);
   }
