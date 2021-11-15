@@ -12,21 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// Notification base payload data.
-abstract class NotificationPayload {
-  /// Original message.
-  final Map<String, dynamic> messageData;
+import 'dart:io';
 
-  /// Fields required to show notification.
-  final String title;
-  final String body;
+/// Wrapper for Platform io.
+class PlatformWrapper {
+  bool get isAndroid => Platform.isAndroid;
 
-  final String? imageUrl;
-
-  const NotificationPayload(
-    this.messageData,
-    this.title,
-    this.body, {
-    this.imageUrl,
-  });
+  bool get isIOS => Platform.isIOS;
 }
