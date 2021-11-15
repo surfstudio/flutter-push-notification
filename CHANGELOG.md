@@ -2,7 +2,6 @@
 
 ## next
 
-* Embedding v2 migration
 
 ## 1.1.0 - 2021-05-30
 
