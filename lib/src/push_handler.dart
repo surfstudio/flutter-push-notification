@@ -26,6 +26,16 @@ typedef HandleMessageFunction = void Function(
 
 /// Notification handling
 class PushHandler {
+  /// The ability to directly subscribe to receive messages
+  final PublishSubject<Map<String, dynamic>> messageSubject = PublishSubject();
+
+  final BehaviorSubject<PushHandleStrategy> selectNotificationSubject =
+      BehaviorSubject();
+
+  final PushHandleStrategyFactory _strategyFactory;
+  final NotificationController _notificationController;
+  final BaseMessagingService _messagingService;
+
   PushHandler(
     this._strategyFactory,
     this._notificationController,
@@ -33,15 +43,6 @@ class PushHandler {
   ) {
     _messagingService.initNotification(handleMessage);
   }
-
-  /// The ability to directly subscribe to receive messages
-  final PublishSubject<Map<String, dynamic>> messageSubject = PublishSubject();
-  final BehaviorSubject<PushHandleStrategy> selectNotificationSubject =
-      BehaviorSubject();
-
-  final PushHandleStrategyFactory _strategyFactory;
-  final NotificationController _notificationController;
-  final BaseMessagingService _messagingService;
 
   /// request permission for show notification
   /// soundPemission - is play sound

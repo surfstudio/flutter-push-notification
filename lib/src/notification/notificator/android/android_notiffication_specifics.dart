@@ -14,14 +14,6 @@
 
 /// Android notification settings
 class AndroidNotificationSpecifics {
-  AndroidNotificationSpecifics({
-    this.icon,
-    this.channelId,
-    this.channelName,
-    this.color,
-    this.autoCancelable,
-  });
-
   ///Icon drawable
   ///
   /// @mipmap/ic_launcher
@@ -44,6 +36,14 @@ class AndroidNotificationSpecifics {
 
   /// Notification is auto cancel
   final bool? autoCancelable;
+
+  AndroidNotificationSpecifics({
+    this.icon,
+    this.channelId,
+    this.channelName,
+    this.color,
+    this.autoCancelable,
+  });
 
   Map<String, Object?> toMap() {
     return {

@@ -25,17 +25,17 @@ const String pushIdParam = 'localPushId';
 
 /// Wrapper over surf notifications
 class NotificationController {
+  Map<int, NotificationCallback> callbackMap =
+      HashMap<int, NotificationCallback>();
+
+  late Notificator _notificator;
+
   NotificationController(OnPermissionDeclineCallback onPermissionDecline) {
     _notificator = Notificator(
       onNotificationTapCallback: _internalOnSelectNotification,
       onPermissionDecline: onPermissionDecline,
     );
   }
-
-  late Notificator _notificator;
-
-  Map<int, NotificationCallback> callbackMap =
-      HashMap<int, NotificationCallback>();
 
   /// Request notification permissions (iOS only)
   Future<bool?> requestPermissions({

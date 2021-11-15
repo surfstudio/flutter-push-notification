@@ -26,8 +26,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late Notificator notification;
 
-  String _bodyText = 'notification test';
   String notificationKey = 'key';
+  String _bodyText = 'notification test';
 
   @override
   void initState() {

@@ -15,6 +15,9 @@
 import 'package:push_notification/push_notification.dart';
 
 class Message extends NotificationPayload {
+  final int extraInt;
+  final double extraDouble;
+
   const Message(
     Map<String, dynamic> messageData,
     String title,
@@ -32,7 +35,4 @@ class Message extends NotificationPayload {
       map['extraDouble'] as double,
     );
   }
-
-  final int extraInt;
-  final double extraDouble;
 }
