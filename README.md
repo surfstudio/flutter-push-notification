@@ -9,6 +9,8 @@
 
 This package is part of the [SurfGear](https://github.com/surfstudio/SurfGear) toolkit made by [Surf](https://surf.ru).
 
+[![Push Notification](https://i.ibb.co/5WYLJfX/Push-Notification.png)](https://github.com/surfstudio/SurfGear)
+
 ## Description
 
 Library for implementing push notifications.
