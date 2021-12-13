@@ -14,10 +14,6 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:push_notification/push_notification.dart';
-import 'package:push_notification/src/base/base_messaging_service.dart';
-import 'package:push_notification/src/base/push_handle_strategy_factory.dart';
-import 'package:push_notification/src/notification/notification_controller.dart';
-import 'package:push_notification/src/push_navigator_holder.dart';
 import 'package:push_notification/src/util/platform_wrapper.dart';
 import 'package:rxdart/subjects.dart';
 
