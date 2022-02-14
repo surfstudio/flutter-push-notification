@@ -67,6 +67,7 @@ abstract class PushHandleStrategyFactory {
     } else {
       throw Exception('Other type expected');
     }
+    return null;
   }
 
   StrategyBuilder? _getStrategyIfAndroid(Map<String, dynamic> messageData) {
