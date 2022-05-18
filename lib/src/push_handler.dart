@@ -59,7 +59,7 @@ class PushHandler {
         requestAlertPermission: alertPermission,
       );
     } else {
-      return Future.value(null);
+      return Future.value();
     }
   }
 
