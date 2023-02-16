@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Something is wrong with Flutter Virtual Keyboard.
+about: Something is wrong with Flutter Push Notification.
 title: "[BUG] "
 labels: bug
 ---
