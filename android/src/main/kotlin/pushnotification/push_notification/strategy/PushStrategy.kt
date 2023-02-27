@@ -11,7 +11,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import ru.surfstudio.android.notification.ui.notification.strategies.PushHandleStrategy
 import pushnotification.push_notification.type.PushNotificationTypeData
-import ru.surfstudio.android.utilktx.ktx.text.EMPTY_STRING
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
@@ -53,7 +52,7 @@ class PushStrategy(override val icon: Int,
 }
 
 private fun NotificationCompat.Builder.applyLargeIcon(imageUrl: String?): NotificationCompat.Builder = apply {
-    if (imageUrl != null && imageUrl != EMPTY_STRING) {
+    if (imageUrl != null && imageUrl.isNotEmpty()) {
         try {
             val bitmap = getBitmapFromURL(imageUrl)
             if (bitmap != null) {
