@@ -33,7 +33,7 @@ class AndroidNotification {
   /// Initialize notification.
   ///
   /// Initializes notification parameters and listening clicks.
-  Future init() async {
+  Future<dynamic> init() async {
     channel.setMethodCallHandler(
       methodCallHandlerCallback,
     );
@@ -47,7 +47,7 @@ class AndroidNotification {
   /// [body] - the main text of the notification.
   /// [data] - data for notification.
   /// [notificationSpecifics] - notification specifics.
-  Future show(
+  Future<dynamic> show(
     int id,
     String title,
     String body,
@@ -74,7 +74,6 @@ class AndroidNotification {
       case openCallback:
         final notificationData = call.arguments as Map;
         onNotificationTap(notificationData);
-        break;
     }
   }
 }
