@@ -1,4 +1,8 @@
 # Changelog
+## 2.0.0
+### Changed
+- update dependency constraints to sdk: '>=3.0.0 <4.0.0' flutter: '>=3.0.0'
+- update minimum surf_lint_rules version to 3.0.0
 
 ## 1.1.1
 
