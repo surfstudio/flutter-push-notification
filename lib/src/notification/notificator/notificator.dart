@@ -24,7 +24,8 @@ import 'package:push_notification/src/util/platform_wrapper.dart';
 /// Callback notification clicks.
 ///
 /// [notificationData] - notification data.
-typedef OnNotificationTapCallback = void Function(Map<dynamic, dynamic> notificationData);
+typedef OnNotificationTapCallback = void Function(
+    Map<dynamic, dynamic> notificationData);
 
 /// Callback on permission decline.
 typedef OnPermissionDeclineCallback = void Function();
