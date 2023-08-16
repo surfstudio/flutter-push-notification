@@ -13,11 +13,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   mocktail: ^0.1.2
-  surf_lint_rules: ^2.0.0
+  surf_lint_rules: ^3.0.0
 
 environment:
-  sdk: ">=2.18.0 <3.0.0"
-  flutter: ">=2.0.0"
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.0.0"
 
 flutter:
   plugin:
