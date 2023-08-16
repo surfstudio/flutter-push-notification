@@ -208,8 +208,8 @@ class TestPushHandleStrategyFactoryWithoutMap
   }) : super(platformWrapper: platformWrapper);
 }
 
-class MockDefaultPushHandleStrategy extends Mock implements PushHandleStrategy {
-}
+class MockDefaultPushHandleStrategy extends Mock
+    implements PushHandleStrategy {}
 
 class MockPushHandleStrategy extends Mock implements PushHandleStrategy {}
 
