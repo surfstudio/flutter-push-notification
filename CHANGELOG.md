@@ -6,7 +6,7 @@
 
 ## 1.1.1
 
-* v2 embedded suport
+* v2 embedded support
 * internal improvement
 
 ## 1.1.0
