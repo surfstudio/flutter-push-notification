@@ -18,7 +18,7 @@ import 'package:push_demo/ui/second_screen.dart';
 import 'package:push_notification/push_notification.dart';
 
 class SecondStrategy extends PushHandleStrategy<Message> {
-  SecondStrategy(Message payload) : super(payload);
+  SecondStrategy(super.payload);
 
   @override
   void onTapNotification(NavigatorState? navigator) {
