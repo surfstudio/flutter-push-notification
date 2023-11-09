@@ -3,7 +3,6 @@ package pushnotification.push_notification
 import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
-import androidx.annotation.NonNull
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -17,7 +16,6 @@ import ru.surfstudio.android.notification.interactor.push.PushInteractor
 import ru.surfstudio.android.notification.ui.PushClickProvider
 import ru.surfstudio.android.notification.ui.PushEventListener
 import ru.surfstudio.android.notification.ui.notification.NOTIFICATION_DATA
-import ru.surfstudio.android.utilktx.ktx.text.EMPTY_STRING
 
 //channels and methods names
 private const val CHANNEL = "surf_notification"
@@ -61,8 +59,8 @@ class PushNotificationPlugin(private var context: Context? = null,
 
     private val pushHandler = PushHandler(activeActivityHolder, pusInteractor)
 
-    override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-        val channel = MethodChannel(flutterPluginBinding.flutterEngine.dartExecutor, CHANNEL)
+    override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        val channel = MethodChannel(flutterPluginBinding.binaryMessenger, CHANNEL)
         channel.setMethodCallHandler(PushNotificationPlugin(flutterPluginBinding.applicationContext, channel))
     }
 
@@ -72,7 +70,7 @@ class PushNotificationPlugin(private var context: Context? = null,
         channel = null
     }
 
-    override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+    override fun onMethodCall(call: MethodCall, result: Result) {
         val args = call.arguments as Map<String, *>?
 
         when (call.method) {
@@ -86,6 +84,9 @@ class PushNotificationPlugin(private var context: Context? = null,
 
     private fun initNotificationTapListener() {
         PushClickProvider.pushEventListener = object : PushEventListener {
+            override fun customActionListener(context: Context, intent: Intent) {
+            }
+
             override fun pushDismissListener(context: Context, intent: Intent) {
                 channel!!.invokeMethod(CALLBACK_DISMISS, null)
             }
@@ -126,8 +127,8 @@ class PushNotificationPlugin(private var context: Context? = null,
         AsyncTask.execute {
             pushHandler.handleMessage(context!!,
                     uniqueId = args[ARG_PUSH_ID] as Int? ?: -1,
-                    title = args[ARG_TITLE] as String? ?: EMPTY_STRING,
-                    body = args[ARG_BODY] as String? ?: EMPTY_STRING,
+                    title = args[ARG_TITLE] as String? ?: "",
+                    body = args[ARG_BODY] as String? ?: "",
                     pushHandleStrategy = strategy
             )
         }
