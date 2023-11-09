@@ -20,7 +20,7 @@ const String androidMipMapIcon = '@mipmap/ic_launcher';
 class SecondScreen extends StatefulWidget {
   final Message payload;
 
-  const SecondScreen(this.payload, {Key? key}) : super(key: key);
+  const SecondScreen(this.payload, {super.key});
 
   @override
   SecondScreenState createState() => SecondScreenState();

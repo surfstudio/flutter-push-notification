@@ -20,10 +20,10 @@ import 'package:push_notification/push_notification.dart';
 void main() => runApp(const MyApp());
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
         setState(
           () {
             _bodyText = 'notification open: '
-                '${notificationData[notificationKey].toString()}';
+                '${notificationData[notificationKey]}';
           },
         );
       },

@@ -18,7 +18,7 @@ import 'package:push_demo/ui/first_screen.dart';
 import 'package:push_notification/push_notification.dart';
 
 class FirstStrategy extends PushHandleStrategy<Message> {
-  FirstStrategy(Message payload) : super(payload);
+  FirstStrategy(super.payload);
 
   @override
   void onTapNotification(NavigatorState? navigator) {
