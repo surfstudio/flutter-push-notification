@@ -9,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.1.2'
+        classpath 'com.android.tools.build:gradle:7.1.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -23,9 +23,10 @@ rootProject.allprojects {
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 28
+    compileSdk 33
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -40,7 +41,6 @@ android {
 }
 
 dependencies {
-    apply plugin: 'kotlin-android-extensions'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "ru.surfstudio.android:push:0.5.0"
     implementation "ru.surfstudio.android:activity-holder:0.5.0"

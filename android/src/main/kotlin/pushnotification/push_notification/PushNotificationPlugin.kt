@@ -137,6 +137,4 @@ class PushNotificationPlugin(private var context: Context? = null,
     private fun getResourceId(resName: String, defType: String): Int {
         return context!!.resources.getIdentifier(resName, defType, context!!.packageName)
     }
-
-
 }
