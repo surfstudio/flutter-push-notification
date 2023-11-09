@@ -19,7 +19,7 @@ import 'package:push_notification/push_notification.dart';
 class MyApp extends StatelessWidget {
   final PushHandler _pushHandler;
 
-  const MyApp(this._pushHandler, {Key? key}) : super(key: key);
+  const MyApp(this._pushHandler, {super.key});
 
   @override
   Widget build(BuildContext context) {

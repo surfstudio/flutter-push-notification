@@ -37,7 +37,7 @@ class IOSNotification {
   /// Initialize notification.
   ///
   /// Initializes notification parameters.
-  Future init() async {
+  Future<dynamic> init() async {
     channel.setMethodCallHandler(
       methodCallHandlerCallback,
     );
@@ -66,7 +66,7 @@ class IOSNotification {
   /// [body] - the main text of the notification.
   /// [data] - data for notification.
   /// [notificationSpecifics] - notification specifics.
-  Future show(
+  Future<dynamic> show(
     int id,
     String title,
     String body,
@@ -90,12 +90,8 @@ class IOSNotification {
     switch (call.method) {
       case openCallback:
         onNotificationTap(call.arguments as Map);
-        break;
       case permissionDeclineCallback:
-        if (onPermissionDecline != null) {
-          onPermissionDecline!();
-        }
-        break;
+        onPermissionDecline?.call();
     }
   }
 }

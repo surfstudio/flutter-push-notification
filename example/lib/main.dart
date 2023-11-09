@@ -12,16 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:push_notification/push_notification.dart';
 
 void main() => runApp(const MyApp());
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -42,7 +44,7 @@ class _MyAppState extends State<MyApp> {
         setState(
           () {
             _bodyText = 'notification open: '
-                '${notificationData[notificationKey].toString()}';
+                '${notificationData[notificationKey]}';
           },
         );
       },
