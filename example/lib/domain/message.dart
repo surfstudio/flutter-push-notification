@@ -19,12 +19,12 @@ class Message extends NotificationPayload {
   final double extraDouble;
 
   const Message(
-    Map<String, dynamic> messageData,
-    String title,
-    String body,
+    super.messageData,
+    super.title,
+    super.body,
     this.extraInt,
     this.extraDouble,
-  ) : super(messageData, title, body);
+  );
 
   factory Message.fromMap(Map<String, dynamic> map) {
     return Message(

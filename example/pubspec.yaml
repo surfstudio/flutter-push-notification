@@ -4,11 +4,11 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  firebase_core: ^1.10.0
-  firebase_messaging: ^11.1.0
+  firebase_core: ^2.11.0
+  firebase_messaging: ^14.5.0
   flutter:
     sdk: flutter
   logger: ^1.0.0
@@ -16,7 +16,7 @@ dependencies:
     path: ../
 
 dev_dependencies:
-  surf_lint_rules: ^2.0.0
+  surf_lint_rules: ^3.0.0
 
 flutter:
   uses-material-design: true

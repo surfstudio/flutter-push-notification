@@ -106,5 +106,5 @@ void main() {
 class MockMethodChannel extends Mock implements MethodChannel {}
 
 class MockOnNotificationTapFunction extends Mock {
-  void call(Map? notificationData);
+  void call(Map<dynamic, dynamic>? notificationData);
 }

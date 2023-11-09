@@ -21,7 +21,7 @@ const String androidMipMapIcon = '@mipmap/ic_launcher';
 class MessageScreen extends StatefulWidget {
   final PushHandler pushHandler;
 
-  const MessageScreen(this.pushHandler, {Key? key}) : super(key: key);
+  const MessageScreen(this.pushHandler, {super.key});
 
   @override
   MessageScreenState createState() => MessageScreenState();

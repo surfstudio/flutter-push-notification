@@ -24,7 +24,8 @@ import 'package:push_notification/src/util/platform_wrapper.dart';
 /// Callback notification clicks.
 ///
 /// [notificationData] - notification data.
-typedef OnNotificationTapCallback = void Function(Map notificationData);
+typedef OnNotificationTapCallback = void Function(
+    Map<dynamic, dynamic> notificationData);
 
 /// Callback on permission decline.
 typedef OnPermissionDeclineCallback = void Function();
@@ -96,7 +97,7 @@ class Notificator {
   /// [body] - the main text of the notification.
   /// [data] - data for notification.
   /// [notificationSpecifics] - notification specifics.
-  Future show(
+  Future<dynamic> show(
     int id,
     String title,
     String body, {
@@ -128,7 +129,7 @@ class Notificator {
   }
 
   @visibleForTesting
-  Future init({MethodChannel? methodChannel}) async {
+  Future<dynamic> init({MethodChannel? methodChannel}) async {
     if (platform.isAndroid) {
       androidNotification ??= AndroidNotification(
         channel: methodChannel ?? _channel,
