@@ -23,6 +23,6 @@ abstract class BaseMessagingService {
 
 enum MessageHandlerType {
   onMessage,
-  onLaunch,
-  onResume,
+  onMessageOpenedApp,
+  onBackgroundMessage,
 }

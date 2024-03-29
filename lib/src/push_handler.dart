@@ -27,8 +27,7 @@ class PushHandler {
   /// The ability to directly subscribe to receive messages.
   final PublishSubject<Map<String, dynamic>> messageSubject = PublishSubject();
 
-  final BehaviorSubject<PushHandleStrategy> selectNotificationSubject =
-      BehaviorSubject();
+  final BehaviorSubject<PushHandleStrategy> selectNotificationSubject = BehaviorSubject();
 
   @visibleForTesting
   final PlatformWrapper platform;
@@ -77,12 +76,11 @@ class PushHandler {
 
     final strategy = _strategyFactory.createByData(message);
 
-    if (handlerType == MessageHandlerType.onLaunch ||
-        handlerType == MessageHandlerType.onResume) {
+    if (handlerType == MessageHandlerType.onBackgroundMessage) {
       strategy.onBackgroundProcess(message);
     }
 
-    if (handlerType == MessageHandlerType.onMessage) {
+    if (handlerType == MessageHandlerType.onMessage || handlerType == MessageHandlerType.onBackgroundMessage) {
       _notificationController.show(
         strategy,
         (_) {

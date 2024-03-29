@@ -14,77 +14,27 @@
 
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:push_demo/firebase_options.dart';
+import 'package:push_demo/notification/example_factory.dart';
+import 'package:push_demo/notification/messaging_service.dart';
+import 'package:push_demo/ui/app.dart';
 import 'package:push_notification/push_notification.dart';
 
-void main() => runApp(const MyApp());
+final pushHandler = PushHandler(
+  ExampleFactory(),
+  NotificationController(
+    () => debugPrint('permission decline'),
+  ),
+  MessagingService(),
+);
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
+  final messagingService = MessagingService();
 
-class _MyAppState extends State<MyApp> {
-  late Notificator notification;
-
-  String notificationKey = 'key';
-  String _bodyText = 'notification test';
-
-  @override
-  void initState() {
-    super.initState();
-    notification = Notificator(
-      onPermissionDecline: () {
-        // ignore: avoid_print
-        print('permission decline');
-      },
-      onNotificationTapCallback: (notificationData) {
-        setState(
-          () {
-            _bodyText = 'notification open: '
-                '${notificationData[notificationKey]}';
-          },
-        );
-      },
-    )..requestPermissions(
-        requestSoundPermission: true,
-        requestAlertPermission: true,
-      );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: Center(
-          child: Text(_bodyText),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            notification.show(
-              1,
-              'hello',
-              'this is test',
-              imageUrl: 'https://www.lumico.io/wp-019/09/flutter.jpg',
-              data: {notificationKey: '[notification data]'},
-              notificationSpecifics: NotificationSpecifics(
-                AndroidNotificationSpecifics(
-                  autoCancelable: true,
-                ),
-              ),
-            );
-          },
-          child: const Icon(
-            Icons.notifications,
-            color: Colors.white,
-          ),
-        ),
-      ),
-    );
-  }
+  runApp(MyApp(pushHandler, messagingService));
 }

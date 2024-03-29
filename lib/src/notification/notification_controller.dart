@@ -26,8 +26,7 @@ const String pushIdParam = 'localPushId';
 
 /// Wrapper over surf notifications.
 class NotificationController {
-  Map<int, NotificationCallback> callbackMap =
-      HashMap<int, NotificationCallback>();
+  Map<int, NotificationCallback> callbackMap = HashMap<int, NotificationCallback>();
 
   @visibleForTesting
   late Notificator notificator;
@@ -104,8 +103,10 @@ class NotificationController {
     print('DEV_INFO onSelectNotification, payload: $payload');
 
     if (payload != null) {
-      final tmpPayload = payload as Map<String, String>;
+      final tmpPayload = payload.cast<String, String>();
       final pushId = int.tryParse(tmpPayload[pushIdParam]!);
+      // ignore: avoid_print
+      print('DEV_INFO $pushId');
       final onSelectNotification = callbackMap[pushId];
       callbackMap.remove(pushId);
 

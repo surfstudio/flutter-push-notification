@@ -29,10 +29,10 @@ class Message extends NotificationPayload {
   factory Message.fromMap(Map<String, dynamic> map) {
     return Message(
       map,
-      (map['notification'] as Map<String, dynamic>)['title'] as String,
-      (map['notification'] as Map<String, dynamic>)['body'] as String,
-      map['extraInt'] as int,
-      map['extraDouble'] as double,
+      map['title'] as String,
+      map['body'] as String,
+      int.parse(map['extraInt'].toString()),
+      double.parse(map['extraDouble'].toString()),
     );
   }
 }

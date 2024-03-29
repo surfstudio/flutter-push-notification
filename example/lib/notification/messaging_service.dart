@@ -12,17 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:push_demo/firebase_options.dart';
+import 'package:push_demo/main.dart';
 import 'package:push_demo/utils/logger.dart';
 import 'package:push_notification/push_notification.dart';
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  logger.d('FIREBASE BACK MESSAGE: $message');
+  pushHandler.handleMessage(message.data, MessageHandlerType.onBackgroundMessage, localNotification: true);
+}
 
 /// Wrapper over [FirebaseMessaging].
 class MessagingService extends BaseMessagingService {
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
-
   final List<String> _topicsSubscription = [];
 
   Future<String?> get fcmToken => _messaging.getToken();
+
+  Future<String?> get apnsToken => _messaging.getAPNSToken();
 
   late HandleMessageFunction _handleMessage;
 
@@ -30,6 +41,7 @@ class MessagingService extends BaseMessagingService {
   @override
   void initNotification(HandleMessageFunction handleMessage) {
     _handleMessage = handleMessage;
+
     FirebaseMessaging.onMessage.listen(
       (message) => _internalMessageInterceptor(
         message.data,
@@ -40,16 +52,21 @@ class MessagingService extends BaseMessagingService {
       (message) {
         _internalMessageInterceptor(
           message.data,
-          MessageHandlerType.onLaunch,
+          MessageHandlerType.onMessageOpenedApp,
         );
       },
     );
-    FirebaseMessaging.onBackgroundMessage(
-      (message) => _internalMessageInterceptor(
-        message.data,
-        MessageHandlerType.onResume,
-      ),
-    );
+
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+    _messaging.getInitialMessage().then((message) {
+      if (message != null) {
+        _internalMessageInterceptor(
+          message.data,
+          MessageHandlerType.onMessageOpenedApp,
+        );
+      }
+    });
   }
 
   /// Request notification permissions for iOS platform.
