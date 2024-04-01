@@ -13,15 +13,13 @@
 // limitations under the License.
 
 import 'package:flutter/material.dart';
-import 'package:push_demo/notification/messaging_service.dart';
 import 'package:push_demo/ui/message_screen.dart';
 import 'package:push_notification/push_notification.dart';
 
 class MyApp extends StatelessWidget {
   final PushHandler _pushHandler;
-  final MessagingService _messagingService;
 
-  const MyApp(this._pushHandler, this._messagingService, {super.key});
+  const MyApp(this._pushHandler, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +31,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.indigo,
       ),
-      home: MessageScreen(pushHandler: _pushHandler, messagingService: _messagingService),
+  
+      home: MessageScreen(pushHandler: _pushHandler),
     );
   }
 }

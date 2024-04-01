@@ -23,7 +23,7 @@ import 'package:push_notification/push_notification.dart';
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   logger.d('FIREBASE BACK MESSAGE: $message');
-  pushHandler.handleMessage(message.data, MessageHandlerType.onBackgroundMessage, localNotification: true);
+  pushHandler.handleMessage(message.data, MessageHandlerType.onBackgroundMessage);
 }
 
 /// Wrapper over [FirebaseMessaging].

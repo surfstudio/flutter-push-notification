@@ -6,7 +6,7 @@ admin.initializeApp({
 });
 
 // 2. Copy the token for your device that is printed in the console on app start (`flutter run`) for the FirebaseMessaging example
-const token = 'dihRhOt4kUswhFrcwIRzPb:APA91bFZwiS0ZXx9Y0kUZF4-StluVk6IXziMNwhUbsbA1_MHFPgNI5l27XE3lYEqNjM5aq4CKp3Wt1B3oKLAJ5-fqNk1P3tJz3sf9C9jnwlN42Wtyw18V40icV0gyCjOuebwJqJ3egYX';
+const token = 'eiUhlkwDS1WKK16r4lc3Cy:APA91bEQR0_eVkfOsWQGgdIOt-mi6bvxMCWUPQyg3A41BKCvutapyzPTaHzT3eVZpWtLRk2RQ67wplQz5SAAqs4wPoBnNOXd3hCJiug0t-fo4o0Psr4vV-8l9pyL6JxcbUQdSQkQzF5H';
 
 
 // 3. From your terminal, root to example/scripts directory & run `npm install`.
@@ -14,6 +14,7 @@ const token = 'dihRhOt4kUswhFrcwIRzPb:APA91bFZwiS0ZXx9Y0kUZF4-StluVk6IXziMNwhUbs
 // If you find your messages have stopped arriving, it is extremely likely they are being throttled by the platform. iOS in particular
 // are aggressive with their throttling policy.
 
+const eventType = process.argv[2];
 
 admin.messaging().send(
     {
@@ -23,7 +24,7 @@ admin.messaging().send(
             body: 'This is second notification',
             extraInt: '1',
             extraDouble: '1.0',
-            event: 'type2',
+            event: eventType,
         },
         android: {
             // Required for background/terminated app state messages on Android

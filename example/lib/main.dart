@@ -22,19 +22,23 @@ import 'package:push_demo/notification/messaging_service.dart';
 import 'package:push_demo/ui/app.dart';
 import 'package:push_notification/push_notification.dart';
 
+final messagingService = MessagingService();
+
 final pushHandler = PushHandler(
   ExampleFactory(),
   NotificationController(
     () => debugPrint('permission decline'),
   ),
-  MessagingService(),
+  messagingService,
 );
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  final messagingService = MessagingService();
+  debugPrint('APNS token: ${await messagingService.apnsToken}');
 
-  runApp(MyApp(pushHandler, messagingService));
+  debugPrint('FCM token: ${await messagingService.fcmToken}');
+
+  runApp(MyApp(pushHandler));
 }

@@ -1,10 +1,6 @@
 {
   "name": "push-notification-scripts",
   "description": "Used to demonstrate sending a RemoteMessage to a client.",
-  "scripts": {
-    "send-first-message": "node send-first-message.js",
-    "send-second-message": "node send-second-message.js"
-  },
   "dependencies": {
     "firebase-admin": "^11.5.0"
   }

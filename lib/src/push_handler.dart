@@ -84,6 +84,7 @@ class PushHandler {
       _notificationController.show(
         strategy,
         (_) {
+          messageSubject.add(message);
           selectNotificationSubject.add(strategy);
           strategy.onTapNotification(PushNavigatorHolder().navigator);
         },
