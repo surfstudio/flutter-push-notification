@@ -16,59 +16,48 @@ import 'package:flutter/material.dart';
 import 'package:push_demo/domain/message.dart';
 import 'package:push_notification/push_notification.dart';
 
-const String androidMipMapIcon = '@mipmap/ic_launcher';
-
-class MessageScreen extends StatefulWidget {
+/// Listens for incoming foreground messages and displays them in a list.
+class MessageList extends StatefulWidget {
   final PushHandler pushHandler;
-
-  const MessageScreen({required this.pushHandler, super.key});
+  const MessageList({required this.pushHandler, super.key});
 
   @override
-  MessageScreenState createState() => MessageScreenState();
+  State<StatefulWidget> createState() => _MessageList();
 }
 
-class MessageScreenState extends State<MessageScreen> {
-  final List<Message> messageList = [];
-  String? initialMessage;
+class _MessageList extends State<MessageList> {
+  List<Message> _messages = [];
 
   @override
   void initState() {
     super.initState();
-
-    widget.pushHandler.requestPermissions(soundPemission: true, alertPermission: true);
-
     widget.pushHandler.messageSubject.listen((messageMap) {
       final message = Message.fromMap(messageMap);
       setState(() {
-        messageList.add(message);
+        _messages = [..._messages, message];
       });
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Push demo'),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: messageList.length,
-              itemBuilder: (_, index) {
-                final message = messageList[index];
+    if (_messages.isEmpty) {
+      return const Text('No messages received');
+    }
 
-                return ListTile(
-                  title: Text(message.title),
-                  subtitle: Text(message.body),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: _messages.length,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.zero,
+      itemBuilder: (context, index) {
+        final message = _messages[index];
+
+        return ListTile(
+          title: Text(message.title),
+          subtitle: Text(message.body),
+        );
+      },
     );
   }
 }

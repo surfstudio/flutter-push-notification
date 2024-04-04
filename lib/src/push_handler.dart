@@ -17,10 +17,7 @@ import 'package:push_notification/push_notification.dart';
 import 'package:push_notification/src/util/platform_wrapper.dart';
 import 'package:rxdart/subjects.dart';
 
-typedef HandleMessageFunction = void Function(
-  Map<String, dynamic> message,
-  MessageHandlerType handlerType,
-);
+typedef HandleMessageFunction = void Function(Map<String, dynamic> message, MessageHandlerType handlerType);
 
 /// Notification handling.
 class PushHandler {
@@ -63,32 +60,34 @@ class PushHandler {
   }
 
   /// Display local notification.
-  /// MessagingService calls this method to display the notification that
+  /// MessagingService calls this method to handle the notification that
   /// came from message service.
   void handleMessage(
     Map<String, dynamic> message,
     MessageHandlerType handlerType, {
     bool localNotification = false,
   }) {
-    if (!localNotification) {
+    if (!localNotification && handlerType != MessageHandlerType.onMessageOpenedApp) {
       messageSubject.add(message);
     }
 
     final strategy = _strategyFactory.createByData(message);
 
-    if (handlerType == MessageHandlerType.onBackgroundMessage) {
-      strategy.onBackgroundProcess(message);
-    }
+    switch (handlerType) {
+      case MessageHandlerType.onMessage:
+        _notificationController.show(
+          strategy,
+          (_) {
+            selectNotificationSubject.add(strategy);
+            strategy.onTapNotification(PushNavigatorHolder().navigator);
+          },
+        );
+      case MessageHandlerType.onBackgroundMessage:
+        strategy.onBackgroundProcess(message);
 
-    if (handlerType == MessageHandlerType.onMessage || handlerType == MessageHandlerType.onBackgroundMessage) {
-      _notificationController.show(
-        strategy,
-        (_) {
-          messageSubject.add(message);
-          selectNotificationSubject.add(strategy);
-          strategy.onTapNotification(PushNavigatorHolder().navigator);
-        },
-      );
+      case MessageHandlerType.onMessageOpenedApp:
+        selectNotificationSubject.add(strategy);
+        strategy.onTapNotification(PushNavigatorHolder().navigator);
     }
   }
 }

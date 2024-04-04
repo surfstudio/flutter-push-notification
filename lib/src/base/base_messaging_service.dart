@@ -22,7 +22,12 @@ abstract class BaseMessagingService {
 }
 
 enum MessageHandlerType {
+  /// The message that is received when the app is in the foreground.
   onMessage,
-  onMessageOpenedApp,
+
+  /// The message that is received when the app is in the background or terminated.
   onBackgroundMessage,
+
+  /// The message that initiated the opening of the application.
+  onMessageOpenedApp,
 }

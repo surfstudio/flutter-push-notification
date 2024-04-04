@@ -59,10 +59,10 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAdRZCf8FyNj0v_jJZSh-ovHdW8AQlocgw',
-    appId: '1:1090377973523:ios:33f915a7a94a7c1fd724e6',
+    appId: '1:1090377973523:ios:9575e0dd7f3de766d724e6',
     messagingSenderId: '1090377973523',
     projectId: 'surf-push-notification-demo',
     storageBucket: 'surf-push-notification-demo.appspot.com',
-    iosBundleId: 'com.example.example',
+    iosBundleId: 'com.example.demo-push-notification',
   );
 }

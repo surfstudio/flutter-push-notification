@@ -12,61 +12,52 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:push_demo/firebase_options.dart';
-import 'package:push_demo/main.dart';
+import 'package:push_demo/domain/message.dart';
 import 'package:push_demo/utils/logger.dart';
 import 'package:push_notification/push_notification.dart';
-
-@pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  logger.d('FIREBASE BACK MESSAGE: $message');
-  pushHandler.handleMessage(message.data, MessageHandlerType.onBackgroundMessage);
-}
 
 /// Wrapper over [FirebaseMessaging].
 class MessagingService extends BaseMessagingService {
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
   final List<String> _topicsSubscription = [];
-
-  Future<String?> get fcmToken => _messaging.getToken();
-
-  Future<String?> get apnsToken => _messaging.getAPNSToken();
-
   late HandleMessageFunction _handleMessage;
+
+  Future<String?> get token => _messaging.getToken();
+
+  Future<Message?> get initialMessage async {
+    final remoteMessage = await _messaging.getInitialMessage();
+
+    if (remoteMessage == null) return null;
+
+    return Message.fromMap(remoteMessage.toMap());
+  }
 
   /// No need to call. Initialization is called inside the [PushHandler].
   @override
   void initNotification(HandleMessageFunction handleMessage) {
     _handleMessage = handleMessage;
 
-    FirebaseMessaging.onMessage.listen(
-      (message) => _internalMessageInterceptor(
-        message.data,
-        MessageHandlerType.onMessage,
-      ),
-    );
-    FirebaseMessaging.onMessageOpenedApp.listen(
-      (message) {
-        _internalMessageInterceptor(
-          message.data,
-          MessageHandlerType.onMessageOpenedApp,
-        );
-      },
-    );
+    FirebaseMessaging.onMessage.listen(_foregroundMessageHandler);
 
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    FirebaseMessaging.onBackgroundMessage(_backgroundMessageHandler);
 
-    _messaging.getInitialMessage().then((message) {
-      if (message != null) {
-        _internalMessageInterceptor(
-          message.data,
-          MessageHandlerType.onMessageOpenedApp,
-        );
-      }
-    });
+    FirebaseMessaging.onMessageOpenedApp.listen(_messageOpenedAppHandler);
+  }
+
+  void _foregroundMessageHandler(RemoteMessage message) {
+    logger.d('FIREBASE FOREGROUND MESSAGE: ${message.toMap()}');
+    _handleMessage.call(message.toMap(), MessageHandlerType.onMessage);
+  }
+
+  @pragma('vm:entry-point')
+  static Future<void> _backgroundMessageHandler(RemoteMessage message) async {
+    logger.d('FIREBASE BACKGROUND MESSAGE: ${message.toMap()}');
+  }
+
+  void _messageOpenedAppHandler(RemoteMessage message) {
+    logger.d('FIREBASE MESSAGE OPENED APP: ${message.toMap()}');
+    _handleMessage.call(message.toMap(), MessageHandlerType.onMessageOpenedApp);
   }
 
   /// Request notification permissions for iOS platform.
@@ -99,13 +90,5 @@ class MessagingService extends BaseMessagingService {
   /// Unsubscribe from all topics.
   void unsubscribe() {
     _topicsSubscription.forEach(unsubscribeFromTopic);
-  }
-
-  Future<dynamic> _internalMessageInterceptor(
-    Map<String, dynamic> message,
-    MessageHandlerType handlerType,
-  ) async {
-    logger.d('FIREBASE MESSAGE: $handlerType - $message');
-    _handleMessage.call(message, handlerType);
   }
 }
