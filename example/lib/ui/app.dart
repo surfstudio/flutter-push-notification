@@ -29,7 +29,8 @@ class MyApp extends StatelessWidget {
       navigatorObservers: [PushObserver()],
       title: 'Push demo',
       theme: ThemeData(primarySwatch: Colors.indigo),
-      home: MainScreen(pushHandler: _pushHandler, messagingService: _messagingService),
+      home: MainScreen(
+          pushHandler: _pushHandler, messagingService: _messagingService),
     );
   }
 }

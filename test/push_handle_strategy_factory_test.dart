@@ -45,7 +45,8 @@ void main() {
     'If platform is not passed to the TestPushHandleStrategyFactory, platform should be '
     'initialized with a default value',
     () {
-      final testPlatformPushHandleStrategyFactory = TestPushHandleStrategyFactoryWithMap(
+      final testPlatformPushHandleStrategyFactory =
+          TestPushHandleStrategyFactoryWithMap(
         defStrategy: defaultPushHandleStrategy,
         strategy: mockPushHandleStrategy,
       );
@@ -194,7 +195,8 @@ class TestPushHandleStrategyFactoryWithMap extends PushHandleStrategyFactory {
 }
 
 /// Сlass with non-overridden map method for testing a map method.
-class TestPushHandleStrategyFactoryWithoutMap extends PushHandleStrategyFactory {
+class TestPushHandleStrategyFactoryWithoutMap
+    extends PushHandleStrategyFactory {
   final PushHandleStrategy strategy;
 
   @override
@@ -208,7 +210,8 @@ class TestPushHandleStrategyFactoryWithoutMap extends PushHandleStrategyFactory 
   }) : super(platformWrapper: platformWrapper);
 }
 
-class MockDefaultPushHandleStrategy extends Mock implements PushHandleStrategy {}
+class MockDefaultPushHandleStrategy extends Mock
+    implements PushHandleStrategy {}
 
 class MockPushHandleStrategy extends Mock implements PushHandleStrategy {}
 

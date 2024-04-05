@@ -24,7 +24,8 @@ class MainScreen extends StatefulWidget {
   final PushHandler pushHandler;
   final MessagingService messagingService;
 
-  const MainScreen({required this.pushHandler, required this.messagingService, super.key});
+  const MainScreen(
+      {required this.pushHandler, required this.messagingService, super.key});
 
   @override
   MainScreenState createState() => MainScreenState();
@@ -69,7 +70,8 @@ class MainScreenState extends State<MainScreen> {
               'FCM Token',
               _token == null
                   ? const CircularProgressIndicator()
-                  : SelectableText(_token!, style: const TextStyle(fontSize: 12)),
+                  : SelectableText(_token!,
+                      style: const TextStyle(fontSize: 12)),
             ),
             _DataCard(
               'Initial Message',
@@ -82,7 +84,8 @@ class MainScreenState extends State<MainScreen> {
                       ],
                     ),
             ),
-            _DataCard('Message Stream', MessageList(pushHandler: widget.pushHandler)),
+            _DataCard(
+                'Message Stream', MessageList(pushHandler: widget.pushHandler)),
           ],
         ),
       ),

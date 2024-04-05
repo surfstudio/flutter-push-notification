@@ -37,7 +37,8 @@ abstract class PushHandleStrategyFactory {
   /// Override with the necessary matching actions and strategy builder.
   Map<String, StrategyBuilder> get map => {};
 
-  PushHandleStrategyFactory({PlatformWrapper? platformWrapper}) : platform = platformWrapper ?? PlatformWrapper();
+  PushHandleStrategyFactory({PlatformWrapper? platformWrapper})
+      : platform = platformWrapper ?? PlatformWrapper();
 
   /// Returns a strategy from push data.
   PushHandleStrategy createByData(Map<String, dynamic> messageData) {
@@ -54,7 +55,7 @@ abstract class PushHandleStrategyFactory {
   }
 
   StrategyBuilder? _getStrategyBuilder(Map<String, dynamic> messageData) {
-     final value = map[(messageData['data'] as Map)[_key]];
+    final value = map[(messageData['data'] as Map)[_key]];
 
     if (value != null) {
       return value;

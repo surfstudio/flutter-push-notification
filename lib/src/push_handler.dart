@@ -17,14 +17,16 @@ import 'package:push_notification/push_notification.dart';
 import 'package:push_notification/src/util/platform_wrapper.dart';
 import 'package:rxdart/subjects.dart';
 
-typedef HandleMessageFunction = void Function(Map<String, dynamic> message, MessageHandlerType handlerType);
+typedef HandleMessageFunction = void Function(
+    Map<String, dynamic> message, MessageHandlerType handlerType);
 
 /// Notification handling.
 class PushHandler {
   /// The ability to directly subscribe to receive messages.
   final PublishSubject<Map<String, dynamic>> messageSubject = PublishSubject();
 
-  final BehaviorSubject<PushHandleStrategy> selectNotificationSubject = BehaviorSubject();
+  final BehaviorSubject<PushHandleStrategy> selectNotificationSubject =
+      BehaviorSubject();
 
   @visibleForTesting
   final PlatformWrapper platform;
@@ -67,7 +69,8 @@ class PushHandler {
     MessageHandlerType handlerType, {
     bool localNotification = false,
   }) {
-    if (!localNotification && handlerType != MessageHandlerType.onMessageOpenedApp) {
+    if (!localNotification &&
+        handlerType != MessageHandlerType.onMessageOpenedApp) {
       messageSubject.add(message);
     }
 

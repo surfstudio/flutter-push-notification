@@ -26,7 +26,8 @@ const String pushIdParam = 'localPushId';
 
 /// Wrapper over surf notifications.
 class NotificationController {
-  Map<int, NotificationCallback> callbackMap = HashMap<int, NotificationCallback>();
+  Map<int, NotificationCallback> callbackMap =
+      HashMap<int, NotificationCallback>();
 
   @visibleForTesting
   late Notificator notificator;

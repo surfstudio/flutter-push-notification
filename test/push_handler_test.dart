@@ -40,13 +40,16 @@ void main() {
           requestSoundPermission: any(named: 'requestSoundPermission'),
           requestAlertPermission: any(named: 'requestAlertPermission'),
         )).thenAnswer((_) => Future.value(true));
-    when(() => notificationController.show(any(), any())).thenAnswer((invocation) async {
-      return (invocation.positionalArguments[1] as NotificationCallback).call(<String, dynamic>{});
+    when(() => notificationController.show(any(), any()))
+        .thenAnswer((invocation) async {
+      return (invocation.positionalArguments[1] as NotificationCallback)
+          .call(<String, dynamic>{});
     });
 
     platform = MockPlatformWrapper();
     pushHandleStrategyFactory = MockPushHandleStrategyFactory();
-    when(() => pushHandleStrategyFactory.createByData(any())).thenReturn(pushHandleStrategy);
+    when(() => pushHandleStrategyFactory.createByData(any()))
+        .thenReturn(pushHandleStrategy);
 
     handler = PushHandler(
       pushHandleStrategyFactory,
@@ -73,8 +76,10 @@ void main() {
 
           final args = verify(
             () => notificationController.requestPermissions(
-              requestSoundPermission: captureAny(named: 'requestSoundPermission'),
-              requestAlertPermission: captureAny(named: 'requestAlertPermission'),
+              requestSoundPermission:
+                  captureAny(named: 'requestSoundPermission'),
+              requestAlertPermission:
+                  captureAny(named: 'requestAlertPermission'),
             ),
           ).captured;
 
@@ -114,7 +119,8 @@ void main() {
         await handler.messageSubject.close();
 
         expect(messages, equals([message]));
-        verify(() => pushHandleStrategy.onBackgroundProcess(message)).called(equals(1));
+        verify(() => pushHandleStrategy.onBackgroundProcess(message))
+            .called(equals(1));
         verifyNever(() => notificationController.show(any(), any()));
       },
     );
@@ -134,7 +140,8 @@ void main() {
 
         expect(messages, equals([message]));
         verifyNever(() => pushHandleStrategy.onBackgroundProcess(any()));
-        verify(() => notificationController.show(any(), any())).called(equals(1));
+        verify(() => notificationController.show(any(), any()))
+            .called(equals(1));
       },
     );
 
@@ -176,10 +183,12 @@ void main() {
 
 class MockBaseMessagingService extends Mock implements BaseMessagingService {}
 
-class MockPushHandleStrategyFactory extends Mock implements PushHandleStrategyFactory {}
+class MockPushHandleStrategyFactory extends Mock
+    implements PushHandleStrategyFactory {}
 
 class MockPushHandleStrategy extends Mock implements PushHandleStrategy {}
 
-class MockNotificationController extends Mock implements NotificationController {}
+class MockNotificationController extends Mock
+    implements NotificationController {}
 
 class MockPlatformWrapper extends Mock implements PlatformWrapper {}
