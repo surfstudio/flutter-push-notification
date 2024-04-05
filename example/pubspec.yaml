@@ -11,13 +11,13 @@ dependencies:
   firebase_messaging: 14.8.0
   flutter:
     sdk: flutter
-  http: ^1.2.1
-  logger: ^1.0.0
+  http: 1.2.1
+  logger: 1.0.0
   push_notification:
     path: ../
 
 dev_dependencies:
-  surf_lint_rules: ^3.0.0
+  surf_lint_rules: 3.0.0
 
 flutter:
   uses-material-design: true
