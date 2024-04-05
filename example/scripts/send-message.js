@@ -4,7 +4,7 @@ admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
 });
 
-const token = '';
+const token = 'cplAJ6hzSxame5QwifCWn3:APA91bEBwYvMs2QSZsvAuf_ssgbrvczHmWkAFjoLNGkDZH0w1NTkQa-xerdJVLEC4iya8AncBvFIiPg3ejSSQgobpERf-9enudEwMivQkU3zwomMaMHHj05jrp8sgJT6nU9cIPUxQJw3';
 
 const eventType = process.argv[2];
 
