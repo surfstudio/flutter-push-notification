@@ -47,7 +47,7 @@ class PushStrategy(override val icon: Int,
         return null
     }
 
-    override fun handlePushInActivity(activity: Activity): Boolean = true
+    override fun handlePushInActivity(activity: Activity): Boolean = false
 
 }
 
