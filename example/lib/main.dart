@@ -29,6 +29,7 @@ import 'package:push_notification/push_notification.dart';
 /// 6. From your terminal, root to example/scripts directory & run `npm install`.
 /// 7. Run `node send-message.js <event>` in the example/scripts directory and your app will receive messages in any state; foreground, background, terminated. <event> can be `type1` or `type2`.
 /// Note: Flutter API documentation for receiving messages: https://firebase.google.com/docs/cloud-messaging/flutter/receive
+/// 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);

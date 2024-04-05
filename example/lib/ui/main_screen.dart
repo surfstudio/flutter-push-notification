@@ -36,7 +36,7 @@ class MainScreenState extends State<MainScreen> {
 
   @override
   void initState() {
-    widget.pushHandler.requestPermissions(soundPemission: true, alertPermission: true);
+    widget.pushHandler.requestPermissions(soundPemission: true);
 
     widget.messagingService.token.then(
       (value) {

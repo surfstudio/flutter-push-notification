@@ -45,8 +45,7 @@ void main() {
     'If platform is not passed to the TestPushHandleStrategyFactory, platform should be '
     'initialized with a default value',
     () {
-      final testPlatformPushHandleStrategyFactory =
-          TestPushHandleStrategyFactoryWithMap(
+      final testPlatformPushHandleStrategyFactory = TestPushHandleStrategyFactoryWithMap(
         defStrategy: defaultPushHandleStrategy,
         strategy: mockPushHandleStrategy,
       );
@@ -125,7 +124,9 @@ void main() {
       test(
         'with correct key and value in messageData should return correctly PushHandleStrategy',
         () {
-          final messageData = <String, dynamic>{'event': 'Test message'};
+          final messageData = <String, dynamic>{
+            'data': {'event': 'Test message'}
+          };
           when(() => platformWrapper.isAndroid).thenReturn(false);
           when(() => platformWrapper.isIOS).thenReturn(true);
 
@@ -139,7 +140,7 @@ void main() {
         'with not correct key in messageData should return default PushHandleStrategy',
         () {
           final messageData = <String, dynamic>{
-            'Not correct event': 'Test message',
+            'data': {'Not correct event': 'Test message'}
           };
           when(() => platformWrapper.isAndroid).thenReturn(false);
           when(() => platformWrapper.isIOS).thenReturn(true);
@@ -154,7 +155,7 @@ void main() {
         'with not correct value in messageData should return correctly PushHandleStrategy',
         () {
           final messageData = <String, dynamic>{
-            'event': 'Test message nor correct',
+            'data': {'event': 'Test message nor correct'}
           };
           when(() => platformWrapper.isAndroid).thenReturn(false);
           when(() => platformWrapper.isIOS).thenReturn(true);
@@ -193,8 +194,7 @@ class TestPushHandleStrategyFactoryWithMap extends PushHandleStrategyFactory {
 }
 
 /// Сlass with non-overridden map method for testing a map method.
-class TestPushHandleStrategyFactoryWithoutMap
-    extends PushHandleStrategyFactory {
+class TestPushHandleStrategyFactoryWithoutMap extends PushHandleStrategyFactory {
   final PushHandleStrategy strategy;
 
   @override
@@ -208,8 +208,7 @@ class TestPushHandleStrategyFactoryWithoutMap
   }) : super(platformWrapper: platformWrapper);
 }
 
-class MockDefaultPushHandleStrategy extends Mock
-    implements PushHandleStrategy {}
+class MockDefaultPushHandleStrategy extends Mock implements PushHandleStrategy {}
 
 class MockPushHandleStrategy extends Mock implements PushHandleStrategy {}
 
