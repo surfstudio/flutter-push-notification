@@ -30,7 +30,7 @@ An example of using the library can be found in [example](example).
 
 * In the notification there should be a field: `click_action: FLUTTER_NOTIFICATION_CLICK`.
 * in manifest in \<activity\> you need to add intent filter:
-  
+
 ```xml
 <intent-filter>
       <action android:name="FLUTTER_NOTIFICATION_CLICK" />
