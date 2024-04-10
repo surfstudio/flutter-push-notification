@@ -12,10 +12,6 @@
 [![Pub popularity](https://badgen.net/pub/popularity/push_notification)](https://pub.dev/packages/push_notification/score)
 ![Flutter Platform](https://badgen.net/pub/flutter-platform/push_notification)
 
-This package is part of the [SurfGear](https://github.com/surfstudio/SurfGear) toolkit made by [Surf](https://surf.ru).
-
-[![Push Notification](https://i.ibb.co/5WYLJfX/Push-Notification.png)](https://github.com/surfstudio/SurfGear)
-
 ## Overview
 
 Library for implementing push notifications.
