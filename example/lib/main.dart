@@ -12,9 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:push_demo/firebase_options.dart';
 import 'package:push_demo/notification/example_factory.dart';
 import 'package:push_demo/notification/messaging_service.dart';
 import 'package:push_demo/ui/app.dart';
@@ -32,7 +30,8 @@ import 'package:push_notification/push_notification.dart';
 ///
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // TODO(anyone): Uncomment after the firebase_option file is added.
+  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   final messagingService = MessagingService();
 
