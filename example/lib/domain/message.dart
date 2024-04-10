@@ -34,8 +34,8 @@ class Message extends NotificationPayload {
       map,
       notification['title'] as String,
       notification['body'] as String,
-      int.parse(data['extraInt'].toString()),
-      double.parse(data['extraDouble'].toString()),
+      int.tryParse(data['extraInt'].toString()) ?? 0,
+      double.tryParse(data['extraDouble'].toString()) ?? 0,
     );
   }
 }
