@@ -12,7 +12,6 @@ This package is part of the [SurfGear](https://github.com/surfstudio/SurfGear) t
 [![Push Notification](https://i.ibb.co/5WYLJfX/Push-Notification.png)](https://github.com/surfstudio/SurfGear)
 
 ## Overview
-## Overview
 
 Library for implementing push notifications.
 The module contains the main work with push notifications.
