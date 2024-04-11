@@ -41,6 +41,9 @@ public class SwiftPushNotificationPlugin: NSObject, FlutterPlugin, UNUserNotific
         case CALL_REQUEST:
             requestPermissions(args: args)
             break
+         case CALL_SHOW:
+            show(args: args)
+            break; 
         default:
             result(FlutterMethodNotImplemented)
             return
