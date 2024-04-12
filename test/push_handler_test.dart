@@ -106,7 +106,7 @@ void main() {
 
   group('Call handleMessage method:', () {
     test(
-      'if MessageHandlerType is onLaunch messageSubject should receive correctly message',
+      'if MessageHandlerType is onBackgroundMessage messageSubject should receive correctly message',
       () async {
         const message = {'message': 'simple on launch text'};
         final messages = <Map<String, dynamic>>[];
@@ -115,15 +115,13 @@ void main() {
 
         expect(messages, isEmpty);
 
-        handler.handleMessage(message, MessageHandlerType.onLaunch);
+        handler.handleMessage(message, MessageHandlerType.onBackgroundMessage);
         await handler.messageSubject.close();
 
         expect(messages, equals([message]));
         verify(() => pushHandleStrategy.onBackgroundProcess(message))
             .called(equals(1));
-        verifyNever(
-          () => notificationController.show(any(), any()),
-        );
+        verifyNever(() => notificationController.show(any(), any()));
       },
     );
 
@@ -148,8 +146,7 @@ void main() {
     );
 
     test(
-      'if MessageHandlerType is onResume and localNotification is true'
-      ' messageSubject shouldn not receive a message',
+      'if MessageHandlerType is onMessageOpenedApp messageSubject shouldn not receive a message',
       () async {
         const message = {'message': 'simple on resume text'};
         final messages = <Map<String, dynamic>>[];
@@ -157,17 +154,14 @@ void main() {
         handler.messageSubject.listen(messages.add);
         handler.handleMessage(
           message,
-          MessageHandlerType.onResume,
+          MessageHandlerType.onMessageOpenedApp,
           localNotification: true,
         );
         await handler.messageSubject.close();
 
         expect(messages, isEmpty);
-        verify(() => pushHandleStrategy.onBackgroundProcess(message))
-            .called(equals(1));
-        verifyNever(
-          () => notificationController.show(any(), any()),
-        );
+        verifyNever(() => pushHandleStrategy.onBackgroundProcess(message));
+        verifyNever(() => notificationController.show(any(), any()));
       },
     );
   });

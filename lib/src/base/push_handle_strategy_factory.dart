@@ -55,33 +55,7 @@ abstract class PushHandleStrategyFactory {
   }
 
   StrategyBuilder? _getStrategyBuilder(Map<String, dynamic> messageData) {
-    final dynamic value = messageData['data'];
-
-    if ((value is Map<String, dynamic> && value.containsKey(_key)) ||
-        messageData.containsKey(_key)) {
-      if (platform.isAndroid) {
-        return _getStrategyIfAndroid(messageData);
-      } else if (platform.isIOS) {
-        return _getStrategyIfIOS(messageData);
-      }
-    } else {
-      throw Exception('Other type expected');
-    }
-    return null;
-  }
-
-  StrategyBuilder? _getStrategyIfAndroid(Map<String, dynamic> messageData) {
     final value = map[(messageData['data'] as Map)[_key]];
-
-    if (value != null) {
-      return map[(messageData['data'] as Map)[_key]];
-    } else {
-      throw Exception('Other type expected');
-    }
-  }
-
-  StrategyBuilder? _getStrategyIfIOS(Map<String, dynamic> messageData) {
-    final value = map[messageData[_key]];
 
     if (value != null) {
       return value;

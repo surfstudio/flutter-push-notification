@@ -17,20 +17,10 @@ import 'package:push_demo/domain/message.dart';
 
 const String androidMipMapIcon = '@mipmap/ic_launcher';
 
-class SecondScreen extends StatefulWidget {
+class SecondScreen extends StatelessWidget {
   final Message payload;
 
   const SecondScreen(this.payload, {super.key});
-
-  @override
-  SecondScreenState createState() => SecondScreenState();
-}
-
-class SecondScreenState extends State<SecondScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +32,8 @@ class SecondScreenState extends State<SecondScreen> {
         child: Column(
           children: <Widget>[
             const Text('Incoming message'),
-            Text('Title : ${widget.payload.title}'),
-            Text('Body: ${widget.payload.body}'),
+            Text('Title : ${payload.title}'),
+            Text('Body: ${payload.body}'),
           ],
         ),
       ),

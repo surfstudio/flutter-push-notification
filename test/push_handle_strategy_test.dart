@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// ignore_for_file: unreachable_from_main
+
 import 'package:flutter/src/widgets/navigator.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:push_notification/push_notification.dart';

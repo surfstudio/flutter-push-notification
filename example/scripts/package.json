@@ -1,0 +1,7 @@
+{
+  "name": "push-notification-scripts",
+  "description": "Used to demonstrate sending a RemoteMessage to a client.",
+  "dependencies": {
+    "firebase-admin": "^11.5.0"
+  }
+}

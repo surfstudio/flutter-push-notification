@@ -94,7 +94,6 @@ class PushNotificationPlugin(private var context: Context? = null,
             override fun pushOpenListener(context: Context, intent: Intent) {
                 val notificationTypeData = intent.getSerializableExtra(NOTIFICATION_DATA) as PushNotificationTypeData
                 val notificationData = HashMap(notificationTypeData.data?.notificationData)
-
                 channel!!.invokeMethod(CALLBACK_OPEN, notificationData)
             }
         }
