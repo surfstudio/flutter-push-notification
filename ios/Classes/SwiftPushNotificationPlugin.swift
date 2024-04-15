@@ -25,6 +25,8 @@ public class SwiftPushNotificationPlugin: NSObject, FlutterPlugin, UNUserNotific
     
     init(channel: FlutterMethodChannel) {
         self.channel = channel
+        super.init()
+        notificationCenter.delegate = self
     }
     
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -39,9 +41,9 @@ public class SwiftPushNotificationPlugin: NSObject, FlutterPlugin, UNUserNotific
         case CALL_REQUEST:
             requestPermissions(args: args)
             break
-        case CALL_SHOW:
+         case CALL_SHOW:
             show(args: args)
-            break;
+            break; 
         default:
             result(FlutterMethodNotImplemented)
             return
@@ -79,8 +81,6 @@ public class SwiftPushNotificationPlugin: NSObject, FlutterPlugin, UNUserNotific
     
     // Show notifications
     func show(args: NSDictionary) {
-        //Implements a notification display while the program is running
-        notificationCenter.delegate = self
         // Notification id
         let id: Int = args[ARG_PUSH_ID] as! Int
         // Notification title

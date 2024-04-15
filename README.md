@@ -27,16 +27,6 @@ An example of using the library can be found in [example](example).
 * To display notifications, you need to create an instance `NotificationController`.
 * And pass created instances when creating `PushHandler` that will create the strategy using the factory.
 
-* In the notification there should be a field: `click_action: FLUTTER_NOTIFICATION_CLICK`.
-* in manifest in \<activity\> you need to add intent filter:
-
-```xml
-<intent-filter>
-      <action android:name="FLUTTER_NOTIFICATION_CLICK" />
-      <category android:name="android.intent.category.DEFAULT" />
-</intent-filter>
-```
-
 ## Installation
 
 Add `push_notification` to your `pubspec.yaml` file:

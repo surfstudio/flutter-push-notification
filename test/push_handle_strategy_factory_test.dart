@@ -125,7 +125,9 @@ void main() {
       test(
         'with correct key and value in messageData should return correctly PushHandleStrategy',
         () {
-          final messageData = <String, dynamic>{'event': 'Test message'};
+          final messageData = <String, dynamic>{
+            'data': {'event': 'Test message'}
+          };
           when(() => platformWrapper.isAndroid).thenReturn(false);
           when(() => platformWrapper.isIOS).thenReturn(true);
 
@@ -139,7 +141,7 @@ void main() {
         'with not correct key in messageData should return default PushHandleStrategy',
         () {
           final messageData = <String, dynamic>{
-            'Not correct event': 'Test message',
+            'data': {'Not correct event': 'Test message'}
           };
           when(() => platformWrapper.isAndroid).thenReturn(false);
           when(() => platformWrapper.isIOS).thenReturn(true);
@@ -154,7 +156,7 @@ void main() {
         'with not correct value in messageData should return correctly PushHandleStrategy',
         () {
           final messageData = <String, dynamic>{
-            'event': 'Test message nor correct',
+            'data': {'event': 'Test message nor correct'}
           };
           when(() => platformWrapper.isAndroid).thenReturn(false);
           when(() => platformWrapper.isIOS).thenReturn(true);

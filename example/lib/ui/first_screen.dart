@@ -17,20 +17,10 @@ import 'package:push_demo/domain/message.dart';
 
 const String androidMipMapIcon = '@mipmap/ic_launcher';
 
-class FirstScreen extends StatefulWidget {
+class FirstScreen extends StatelessWidget {
   final Message payload;
 
   const FirstScreen(this.payload, {super.key});
-
-  @override
-  FirstScreenState createState() => FirstScreenState();
-}
-
-class FirstScreenState extends State<FirstScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +32,8 @@ class FirstScreenState extends State<FirstScreen> {
         child: Column(
           children: <Widget>[
             const Text('Incoming message'),
-            Text('Title : ${widget.payload.title}'),
-            Text('Body: ${widget.payload.body}'),
+            Text('Title : ${payload.title}'),
+            Text('Body: ${payload.body}'),
           ],
         ),
       ),
