@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.1
+
+* Rebranding.
+
 ## 2.0.0
 
 * Fix bug with dependencies resolving on android

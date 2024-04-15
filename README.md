@@ -1,15 +1,14 @@
 # Push Notification
 
-[![Build Status](https://shields.io/github/actions/workflow/status/surfstudio/flutter-push-notification/main.yml?logo=github&logoColor=white)](https://github.com/surfstudio/flutter-push-notification)
+<img src="https://raw.githubusercontent.com/surfstudio/flutter-open-source/main/assets/logo_white.png#gh-dark-mode-only" width="200">
+<img src="https://raw.githubusercontent.com/surfstudio/flutter-open-source/main/assets/logo_black.png#gh-light-mode-only" width="200">
+
+[![Build Status](https://shields.io/github/actions/workflow/status/surfstudio/flutter-push-notification/on_pull_request.yml?logo=github&logoColor=white)](https://github.com/surfstudio/flutter-push-notification)
 [![Coverage Status](https://img.shields.io/codecov/c/github/surfstudio/flutter-push-notification?logo=codecov&logoColor=white)](https://app.codecov.io/gh/surfstudio/flutter-push-notification)
 [![Pub Version](https://img.shields.io/pub/v/push_notification?logo=dart&logoColor=white)](https://pub.dev/packages/push_notification)
 [![Pub Likes](https://badgen.net/pub/likes/push_notification)](https://pub.dev/packages/push_notification)
 [![Pub popularity](https://badgen.net/pub/popularity/push_notification)](https://pub.dev/packages/push_notification/score)
 ![Flutter Platform](https://badgen.net/pub/flutter-platform/push_notification)
-
-This package is part of the [SurfGear](https://github.com/surfstudio/SurfGear) toolkit made by [Surf](https://surf.ru).
-
-[![Push Notification](https://i.ibb.co/5WYLJfX/Push-Notification.png)](https://github.com/surfstudio/SurfGear)
 
 ## Overview
 
