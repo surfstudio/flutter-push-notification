@@ -1,9 +1,7 @@
 # Push Notification
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/surfstudio/flutter-open-source/blob/887525c23f4d57a2d96fc2e6a31e15d1e29d1787/assets/logo_white.png">
-  <img alt="Shows an illustrated sun in light color mode and a moon with stars in dark color mode." src="https://github.com/surfstudio/flutter-open-source/blob/887525c23f4d57a2d96fc2e6a31e15d1e29d1787/assets/logo_black.png" width ="200">
-</picture>
+<img src="https://raw.githubusercontent.com/surfstudio/flutter-open-source/main/assets/logo_white.png#gh-dark-mode-only" width="200">
+<img src="https://raw.githubusercontent.com/surfstudio/flutter-open-source/main/assets/logo_black.png#gh-light-mode-only" width="200">
 
 [![Build Status](https://shields.io/github/actions/workflow/status/surfstudio/flutter-push-notification/on_pull_request.yml?logo=github&logoColor=white)](https://github.com/surfstudio/flutter-push-notification)
 [![Coverage Status](https://img.shields.io/codecov/c/github/surfstudio/flutter-push-notification?logo=codecov&logoColor=white)](https://app.codecov.io/gh/surfstudio/flutter-push-notification)
