@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.2
+
+* Correct logo position in readme.
+
 ## 2.0.1
 
 * Rebranding.
@@ -16,7 +20,6 @@
 * fixed the problem of incorrect display of push notifications on iOS
 * updated usage example
 * updated docs: no longer need to specify `click_action: FLUTTER_NOTIFICATION_CLICK` in notification and add `intent-filter` to android manifest
-
 
 ## 1.1.1
 

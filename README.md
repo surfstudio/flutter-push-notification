@@ -1,7 +1,7 @@
 # Push Notification
 
-<img src="https://raw.githubusercontent.com/surfstudio/flutter-open-source/main/assets/logo_white.png#gh-dark-mode-only" width="200">
 <img src="https://raw.githubusercontent.com/surfstudio/flutter-open-source/main/assets/logo_black.png#gh-light-mode-only" width="200">
+<img src="https://raw.githubusercontent.com/surfstudio/flutter-open-source/main/assets/logo_white.png#gh-dark-mode-only" width="200">
 
 [![Build Status](https://shields.io/github/actions/workflow/status/surfstudio/flutter-push-notification/on_pull_request.yml?logo=github&logoColor=white)](https://github.com/surfstudio/flutter-push-notification)
 [![Coverage Status](https://img.shields.io/codecov/c/github/surfstudio/flutter-push-notification?logo=codecov&logoColor=white)](https://app.codecov.io/gh/surfstudio/flutter-push-notification)
